@@ -100,12 +100,12 @@ export const MACHINE_SERIES = {
     },
     RoseX: {
         value: 'RoseX',
-        label: 'Rose X',
+        label: 'Rose Pro',
         setting: {
             size: {
-                x: 150,
-                y: 150,
-                z: 150
+                x: 250,
+                y: 220,
+                z: 245
             }
         }
     }

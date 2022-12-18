@@ -224,7 +224,7 @@ class VisualizerModelTransformation extends PureComponent {
                         disabled={disabled}
                     />
                 </div>
-                {series === 'RoseX' && (
+                {series === 'Rose Y' && (
                     <div className={classNames(styles['model-extruder__select'])}>
                         <FormControlLabel
                             value="0"
@@ -260,7 +260,7 @@ class VisualizerModelTransformation extends PureComponent {
                         />
                     </div>
                 )}
-                <div className={classNames(styles['model-isStick'])}>
+                <div className={classNames(styles['model-isStick'])} style={{ display: 'none' }}>
                     <FormControlLabel
                         control={(
                             <Switch
@@ -497,6 +497,7 @@ class VisualizerModelTransformation extends PureComponent {
 const mapStateToProps = (state) => {
     const machine = state.machine;
     const printing = state.printing;
+    console.log('printing', printing);
     const {
         selectedModelID,
         hasModel,
