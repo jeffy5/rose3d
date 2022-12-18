@@ -159,11 +159,15 @@ export function loadDefinitionLoaderByFilename(filename, configPath) {
 }
 
 export function loadMaterialDefinitions() {
-    const predefined = [];
+    const predefined = [
+      'material.pla.def.json',
+      'material.tpu.def.json',
+      'material.petg.def.json',
+      'material.abs.def.json',
+    ];
 
     const regex = /^material.([A-Za-z0-9_]+).def.json$/;
     const defaultDefinitionLoader = loadDefinitionLoaderByFilename('material.pla.def.json');
-    predefined.push('material.pla.def.json');
     // predefined.push('material.tpu.def.json');
 
 

@@ -497,7 +497,6 @@ class VisualizerModelTransformation extends PureComponent {
 const mapStateToProps = (state) => {
     const machine = state.machine;
     const printing = state.printing;
-    console.log('printing', printing);
     const {
         selectedModelID,
         hasModel,

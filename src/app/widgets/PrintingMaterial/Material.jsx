@@ -52,7 +52,8 @@ class Material extends PureComponent {
         materialDefinitionOptions: [],
 
         isRenaming: null,
-        newName: null
+        newName: null,
+        showCustomOptions: false
     };
 
     actions = {
@@ -149,6 +150,11 @@ class Material extends PureComponent {
             if (this.props.materialDefinitions.length) {
                 this.actions.onChangeMaterial(this.props.materialDefinitions[0].definitionId);
             }
+        },
+        toggleShowCustom: () => {
+            this.setState({
+                showCustomOptions: !this.state.showCustomOptions
+            });
         }
     };
 
@@ -180,7 +186,8 @@ class Material extends PureComponent {
 
             const materialDefinitionOptions = nextProps.materialDefinitions.map(d => ({
                 label: d.name,
-                value: d.definitionId
+                value: d.definitionId,
+                isCustom: !d.metadata.readonly
             }));
 
             Object.assign(newState, {
@@ -197,7 +204,7 @@ class Material extends PureComponent {
     render() {
         const state = this.state;
         const actions = this.actions;
-        const { materialDefinition, materialDefinitionOptions } = state;
+        const { materialDefinition, materialDefinitionOptions, showCustomOptions } = state;
 
         if (!materialDefinition) {
             return null;
@@ -205,113 +212,162 @@ class Material extends PureComponent {
 
         return (
             <React.Fragment>
-                <div>
-                    {materialDefinitionOptions.map((option) => {
-                        return (
-                            <Anchor
-                                key={option.value}
-                                className={classNames(styles['material-btn'], { [styles.selected]: this.actions.isMaterialSelected(option) })}
-                                onClick={() => this.actions.onChangeMaterial(option.value)}
-                            >
-                                {i18n._(option.label)}
-                            </Anchor>
-                        );
-                    })}
-                </div>
-                <div style={{ marginTop: '8px', color: '#808080' }}>
-                    {!state.isRenaming && (
-                        <span>{materialDefinition.name}</span>
-                    )}
-                    {state.isRenaming && (
-                        <React.Fragment>
-                            <input
-                                value={state.newName}
-                                onChange={actions.onChangeNewName}
-                            />
-                            <Anchor
-                                className={classNames('fa', 'fa-check', widgetStyles['fa-btn'])}
-                                onClick={actions.onRenameDefinitionEnd}
-                            />
-                        </React.Fragment>
-                    )}
-                    <div
-                        style={{
-                            display: 'inline-block',
-                            float: 'right'
-                        }}
-                    >
-                        {!isOfficialDefinition(materialDefinition) && (
-                            <Anchor
-                                className={classNames('fa', 'fa-edit', widgetStyles['fa-btn'])}
-                                onClick={actions.onRenameDefinitionStart}
-                            />
+                <div className={styles['material-options-container']}>
+                    <div className={styles['material-options']}>
+                        <div className={styles['preset-options']}>
+                            <div className={styles['options-btn-list']}>
+                                {materialDefinitionOptions.filter(d => !d.isCustom).map((option) => {
+                                    return (
+                                        <Anchor
+                                            key={option.value}
+                                            className={classNames(styles['material-btn'], styles['options-btn'], { [styles.selected]: this.actions.isMaterialSelected(option) })}
+                                            onClick={() => this.actions.onChangeMaterial(option.value)}
+                                        >
+                                            {i18n._(option.label)}
+                                        </Anchor>
+                                    );
+                                })}
+                            </div>
+
+                            <div>
+                                <Anchor
+                                    className={styles['btn-expand']}
+                                    onClick={() => this.actions.toggleShowCustom()}
+                                >
+                                    {showCustomOptions && <i className="fa fa-fw fa-chevron-up" />}
+                                    {!showCustomOptions && <i className="fa fa-fw fa-chevron-down" />}
+                                </Anchor>
+                            </div>
+                        </div>
+
+                        {showCustomOptions && materialDefinitionOptions.some(d => d.isCustom) && (
+                            <div className={styles['custom-options']}>
+                                {materialDefinitionOptions.filter(d => d.isCustom).map((option) => {
+                                    return (
+                                        <Anchor
+                                            key={option.value}
+                                            className={classNames(styles['material-btn'], styles['options-btn'], { [styles.selected]: this.actions.isMaterialSelected(option) })}
+                                            onClick={() => this.actions.onChangeMaterial(option.value)}
+                                        >
+                                            {i18n._(option.label)}
+                                        </Anchor>
+                                    );
+                                })}
+                            </div>
                         )}
-                        <Anchor
-                            className={classNames('fa', 'fa-plus', widgetStyles['fa-btn'])}
-                            onClick={actions.onDuplicateMaterialDefinition}
-                        />
-                        {!isOfficialDefinition(materialDefinition) && (
-                            <Anchor
-                                className={classNames('fa', 'fa-trash-o', widgetStyles['fa-btn'])}
-                                onClick={actions.onRemoveDefinition}
-                            />
+
+                        {!showCustomOptions && !materialDefinition.metadata.readonly && (
+                            <div className={styles['custom-options']}>
+                                <Anchor
+                                    key={materialDefinition.definitionId}
+                                    className={classNames(styles['material-btn'], styles['options-btn'], styles.selected)}
+                                >
+                                    {i18n._(materialDefinition.name)}
+                                </Anchor>
+                            </div>
                         )}
                     </div>
                 </div>
-                <div className={classNames(widgetStyles.separator, widgetStyles['separator-underline'])} />
-                {materialDefinition && (
-                    <div className="sm-parameter-container">
-                        {MATERIAL_CONFIG_KEYS.map((key) => {
-                            const setting = materialDefinition.settings[key];
 
-                            const { label, description, type, unit = '', enabled = '' } = setting;
-                            const defaultValue = setting.default_value;
+                <div className={styles['material-parameter-container']}>
+                    <div className={styles['material-parameter']}>
+                        <div style={{ marginTop: '8px', color: '#808080' }}>
+                            {!state.isRenaming && (
+                                <span>{materialDefinition.name}</span>
+                            )}
+                            {state.isRenaming && (
+                                <React.Fragment>
+                                    <input
+                                        value={state.newName}
+                                        onChange={actions.onChangeNewName}
+                                    />
+                                    <Anchor
+                                        className={classNames('fa', 'fa-check', widgetStyles['fa-btn'])}
+                                        onClick={actions.onRenameDefinitionEnd}
+                                    />
+                                </React.Fragment>
+                            )}
+                            <div
+                                style={{
+                                    display: 'inline-block',
+                                    float: 'right'
+                                }}
+                            >
+                                {!isOfficialDefinition(materialDefinition) && (
+                                    <Anchor
+                                        className={classNames('fa', 'fa-edit', widgetStyles['fa-btn'])}
+                                        onClick={actions.onRenameDefinitionStart}
+                                    />
+                                )}
+                                <Anchor
+                                    className={classNames('fa', 'fa-plus', widgetStyles['fa-btn'])}
+                                    onClick={actions.onDuplicateMaterialDefinition}
+                                />
+                                {!isOfficialDefinition(materialDefinition) && (
+                                    <Anchor
+                                        className={classNames('fa', 'fa-trash-o', widgetStyles['fa-btn'])}
+                                        onClick={actions.onRemoveDefinition}
+                                    />
+                                )}
+                            </div>
+                        </div>
 
-                            if (enabled) {
-                            // for example: retraction_hop.enable = retraction_enable and retraction_hop_enabled
-                                const conditions = enabled.split('and').map(c => c.trim());
+                        <div className={classNames(widgetStyles.separator, widgetStyles['separator-underline'])} style={{ marginTop: 4 }} />
+                        {materialDefinition && (
+                            <div className="sm-parameter-container">
+                                {MATERIAL_CONFIG_KEYS.map((key) => {
+                                    const setting = materialDefinition.settings[key];
 
-                                for (const condition of conditions) {
-                                // Simple implementation of condition
-                                    if (materialDefinition.settings[condition]) {
-                                        const value = materialDefinition.settings[condition].default_value;
-                                        if (!value) {
-                                            return null;
+                                    const { label, description, type, unit = '', enabled = '' } = setting;
+                                    const defaultValue = setting.default_value;
+
+                                    if (enabled) {
+                                    // for example: retraction_hop.enable = retraction_enable and retraction_hop_enabled
+                                        const conditions = enabled.split('and').map(c => c.trim());
+
+                                        for (const condition of conditions) {
+                                        // Simple implementation of condition
+                                            if (materialDefinition.settings[condition]) {
+                                                const value = materialDefinition.settings[condition].default_value;
+                                                if (!value) {
+                                                    return null;
+                                                }
+                                            }
                                         }
                                     }
-                                }
-                            }
 
-                            return (
-                                <div key={key} className="sm-parameter-row">
-                                    <TipTrigger title={i18n._(label)} content={i18n._(description)}>
-                                        <span className="sm-parameter-row__label-lg">{i18n._(label)}</span>
-                                        {type === 'float' && (
-                                            <Input
-                                                className="sm-parameter-row__input"
-                                                value={defaultValue}
-                                                onChange={value => {
-                                                    this.actions.onChangeMaterialDefinition(key, value);
-                                                }}
-                                                disabled={!isDefinitionEditable(materialDefinition, key)}
-                                            />
-                                        )}
-                                        {type === 'bool' && (
-                                            <input
-                                                className="sm-parameter-row__checkbox"
-                                                type="checkbox"
-                                                checked={defaultValue}
-                                                disabled={!isDefinitionEditable(materialDefinition, key)}
-                                                onChange={(event) => this.actions.onChangeMaterialDefinition(key, event.target.checked)}
-                                            />
-                                        )}
-                                        <span className="sm-parameter-row__input-unit">{unit}</span>
-                                    </TipTrigger>
-                                </div>
-                            );
-                        })}
+                                    return (
+                                        <div key={key} className="sm-parameter-row">
+                                            <TipTrigger title={i18n._(label)} content={i18n._(description)}>
+                                                <span className="sm-parameter-row__label-lg">{i18n._(label)}</span>
+                                                {type === 'float' && (
+                                                    <Input
+                                                        className="sm-parameter-row__input"
+                                                        value={defaultValue}
+                                                        onChange={value => {
+                                                            this.actions.onChangeMaterialDefinition(key, value);
+                                                        }}
+                                                        disabled={!isDefinitionEditable(materialDefinition, key)}
+                                                    />
+                                                )}
+                                                {type === 'bool' && (
+                                                    <input
+                                                        className="sm-parameter-row__checkbox"
+                                                        type="checkbox"
+                                                        checked={defaultValue}
+                                                        disabled={!isDefinitionEditable(materialDefinition, key)}
+                                                        onChange={(event) => this.actions.onChangeMaterialDefinition(key, event.target.checked)}
+                                                    />
+                                                )}
+                                                <span className="sm-parameter-row__input-unit">{unit}</span>
+                                            </TipTrigger>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
                     </div>
-                )}
+                </div>
             </React.Fragment>
         );
     }

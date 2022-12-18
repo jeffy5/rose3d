@@ -3,22 +3,14 @@
 @import "../widgets/styles.styl"
 
 
-.content-table
-    display: table
-    width: 100%
-    height: 'calc(100vh - %s)' % $navbar-height
-
 .content-row
-    display: table-row
+    display: flex
+    width: 100%
+    height: 100vh
 
 .visualizer
-    display: table-cell
-    position: fixed
-    top: $navbar-height
-    left: $sidebar-width
-    right: $controls-width
-
-    bottom: 0
+    flex: 1
+    position: relative
 
 .controls
     display: table-cell
@@ -26,6 +18,6 @@
     min-width: $controls-width
     max-width: $controls-width
     right: 0
-    padding: 0px 10px 0 20px
+    padding: 0;
     background-color: $grey-color5
     border-left: 1px solid $border-color

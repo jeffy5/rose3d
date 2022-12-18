@@ -179,7 +179,6 @@ function createDefaultWidget(WrappedWidget) {
                     <Widget.Content
                         style={{
                             position: 'relative',
-                            padding: '7px 12px 5px',
                             display: state.minimized ? 'none' : 'block'
                         }}
                     >
