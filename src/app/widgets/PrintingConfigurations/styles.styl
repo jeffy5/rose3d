@@ -1,5 +1,47 @@
 @import "../../styles/variables.styl"
 
+.configuration-options-container
+    padding: 12px 14px
+
+    .configuration-options
+        background: #FFFFFF
+        border-radius: 15px
+        box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.3)
+
+        .preset-options
+            display: flex
+            align-items: center
+            padding: 4px 12px 4px 4px
+
+            .options-btn-list
+                flex: 1
+                margin-right: 12px
+                display: flex
+
+                .options-btn
+                    flex: 1
+                    text-align: center
+                    display: inline-block
+                    height: 24px
+                    line-height: 24px
+                    border-radius: 12px
+                    text-decoration: none
+                    border: none
+                    background: #FFFFFF
+
+                    &.selected
+                        background: $brand-primary
+                        color: #FFFFFF
+
+
+        .custom-options
+            padding: 0
+            padding: 8px 4px
+
+            .options-btn
+                display: block
+                text-align: start
+
 table.config-details-table
     color: $desc-text-color
     margin-left: 10px

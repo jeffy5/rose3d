@@ -1,6 +1,32 @@
 .rose-tabs
-  display: block
+  display: flex
+  align-items: center
+  padding: 2px
+  height: 20px
+  border-radius: 10px
+  background: #E4E4E4
+
+  &.rose-large
+    height: 30px
+    border-radius: 15px
+    padding: 3px
+
+    > .rose-tab
+        height: 24px
+        line-height: 24px
+        border-radius: 12px
 
   > .rose-tab
     display: inline-block
+    flex: 1
+    height: 16px
+    line-height: 16px
+    padding: 0
+    background: transparent
+    border-radius: 8px
+    font-size: 10px
+    border: none
+    color: #3D3D3D
 
+    &.rose-selected
+      background: #FFFFFF

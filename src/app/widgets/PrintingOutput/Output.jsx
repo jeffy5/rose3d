@@ -171,86 +171,92 @@ class Output extends PureComponent {
         return (
             <div style={{ paddingBottom: '20px' }}>
                 <div>
-                    <table style={{ width: '100%', marginTop: '10px' }}>
-                        <tbody>
-                            <tr>
-                                <td style={{ paddingLeft: '0px', width: '50%' }}>
-                                    <Select
-                                        clearable={false}
-                                        style={{ borderWidth: '2px' }}
-                                        options={[{
-                                            value: 'stl_binary',
-                                            label: i18n._('STL File (Binary)')
-                                        }, {
-                                            value: 'stl_ascii',
-                                            label: i18n._('STL File (ASCII)')
-                                        }, {
-                                            value: 'obj',
-                                            label: i18n._('OBJ File (*.obj)')
-                                        }]}
-                                        value={state.exportModelFormatInfo}
-                                        searchable={false}
-                                        onChange={actions.onChangeExportModelFormat}
-                                    />
-                                </td>
-                                <td style={{ paddingRight: '0px', width: '50%' }}>
-                                    <button
-                                        type="button"
-                                        className="sm-btn-large sm-btn-default"
-                                        style={{ width: '100%' }}
-                                        disabled={!hasModel}
-                                        onClick={actions.onClickExportModel}
-                                    >
-                                        {i18n._('Export Models')}
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table style={{ width: '100%', marginTop: '10px' }}>
-                        <tbody>
-                            <tr>
-                                <td style={{ paddingRight: '0px', width: '50%' }}>
-                                    <button
-                                        type="button"
-                                        className="sm-btn-large sm-btn-default"
-                                        style={{ width: '100%' }}
-                                        onClick={actions.onClickExportConfig}
-                                    >
-                                        {i18n._('Export Config')}
-                                    </button>
-                                </td>
-                                <td style={{ paddingRight: '0px', width: '50%' }}>
-                                    <button
-                                        type="button"
-                                        className="sm-btn-large sm-btn-default"
-                                        style={{ width: '100%' }}
-                                        onClick={actions.onClickImportConfig}
-                                    >
-                                        {i18n._('Import Config')}
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <button
-                        type="button"
-                        className="sm-btn-large sm-btn-default"
-                        onClick={actions.onClickGenerateGcode}
-                        disabled={!hasModel || isSlicing || isAnyModelOverstepped}
-                        style={{ display: 'block', width: '100%', marginTop: '10px' }}
-                    >
-                        {i18n._('Slice')}
-                    </button>
-                    <button
-                        type="button"
-                        className="sm-btn-large sm-btn-default"
-                        onClick={actions.onClickExportGcode}
-                        disabled={!gcodeLine}
-                        style={{ display: 'block', width: '100%', marginTop: '10px' }}
-                    >
-                        {i18n._('Save To File')}
-                    </button>
+                    {false && (
+                        <table style={{ width: '100%', marginTop: '10px' }}>
+                            <tbody>
+                                <tr>
+                                    <td style={{ paddingLeft: '0px', width: '50%' }}>
+                                        <Select
+                                            clearable={false}
+                                            style={{ borderWidth: '2px' }}
+                                            options={[{
+                                                value: 'stl_binary',
+                                                label: i18n._('STL File (Binary)')
+                                            }, {
+                                                value: 'stl_ascii',
+                                                label: i18n._('STL File (ASCII)')
+                                            }, {
+                                                value: 'obj',
+                                                label: i18n._('OBJ File (*.obj)')
+                                            }]}
+                                            value={state.exportModelFormatInfo}
+                                            searchable={false}
+                                            onChange={actions.onChangeExportModelFormat}
+                                        />
+                                    </td>
+                                    <td style={{ paddingRight: '0px', width: '50%' }}>
+                                        <button
+                                            type="button"
+                                            className="sm-btn-large sm-btn-default"
+                                            style={{ width: '100%' }}
+                                            disabled={!hasModel}
+                                            onClick={actions.onClickExportModel}
+                                        >
+                                            {i18n._('Export Models')}
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    )}
+                    {false && (
+                        <table style={{ width: '100%', marginTop: '10px' }}>
+                            <tbody>
+                                <tr>
+                                    <td style={{ paddingRight: '0px', width: '50%' }}>
+                                        <button
+                                            type="button"
+                                            className="sm-btn-large sm-btn-default"
+                                            style={{ width: '100%' }}
+                                            onClick={actions.onClickExportConfig}
+                                        >
+                                            {i18n._('Export Config')}
+                                        </button>
+                                    </td>
+                                    <td style={{ paddingRight: '0px', width: '50%' }}>
+                                        <button
+                                            type="button"
+                                            className="sm-btn-large sm-btn-default"
+                                            style={{ width: '100%' }}
+                                            onClick={actions.onClickImportConfig}
+                                        >
+                                            {i18n._('Import Config')}
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    )}
+                    <div style={{ background: '#3D3D3D', display: 'flex', justifyContent: 'center', alignItems: 'center', height: 46 }}>
+                        <div className="rose-tabs rose-large" style={{ width: 190 }}>
+                            <button
+                                type="button"
+                                className="rose-tab rose-selected"
+                                onClick={actions.onClickGenerateGcode}
+                                disabled={!hasModel || isSlicing || isAnyModelOverstepped}
+                            >
+                                {i18n._('Slice')}
+                            </button>
+                            <button
+                                type="button"
+                                className="rose-tab"
+                                onClick={actions.onClickExportGcode}
+                                disabled={!gcodeLine}
+                            >
+                                {i18n._('Save To File')}
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <Thumbnail
                     ref={this.thumbnail}

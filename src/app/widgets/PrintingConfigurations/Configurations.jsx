@@ -72,6 +72,8 @@ class Configurations extends PureComponent {
         newName: null,
         isRenaming: false,
 
+        showCustomOptions: false,
+
         // custom config
         customDefinitionOptions: [],
         customConfigGroup: [
@@ -322,6 +324,11 @@ class Configurations extends PureComponent {
             }
             this.props.updateDefaultQualityId('quality.fast_print');
             this.props.updateDefaultAdvised(isAdvised);
+        },
+        toggleShowCustom: () => {
+            this.setState({
+                showCustomOptions: !this.state.showCustomOptions
+            });
         }
     };
 
@@ -406,7 +413,7 @@ class Configurations extends PureComponent {
         const raceQualityDefinition = this.props.qualityDefinitions.find(d => d.definitionId === 'quality.race_quality');
         // const series = this.props.series;
 
-        const { isOfficialTab, officialQualityDefinition, customQualityDefinition, customDefinitionOptions, SupportDefinition } = this.state;
+        const { isOfficialTab, officialQualityDefinition, customQualityDefinition, customDefinitionOptions, SupportDefinition, showCustomOptions } = this.state;
         const qualityDefinition = isOfficialTab ? officialQualityDefinition : customQualityDefinition;
 
         if (!qualityDefinition) {
@@ -416,12 +423,12 @@ class Configurations extends PureComponent {
         const editable = isDefinitionEditable(qualityDefinition);
 
         return (
-            <div>
-                <div className="sm-tabs" style={{ marginTop: '6px', marginBottom: '12px' }}>
+            <div className={styles['configuration-options-container']}>
+                <div className="rose-tabs" style={{ marginTop: '6px', marginBottom: '12px' }}>
                     <button
                         type="button"
                         style={{ width: '50%' }}
-                        className={classNames('sm-tab', { 'sm-selected': isOfficialTab })}
+                        className={classNames('rose-tab', { 'rose-selected': isOfficialTab })}
                         onClick={() => {
                             this.actions.onSetOfficoalTab(true);
                         }}
@@ -431,7 +438,7 @@ class Configurations extends PureComponent {
                     <button
                         type="button"
                         style={{ width: '50%' }}
-                        className={classNames('sm-tab', { 'sm-selected': !isOfficialTab })}
+                        className={classNames('rose-tab', { 'rose-selected': !isOfficialTab })}
                         onClick={() => {
                             this.actions.onSetOfficoalTab(false);
                         }}
@@ -439,56 +446,70 @@ class Configurations extends PureComponent {
                         {i18n._('CUSTOMIZE')}
                     </button>
                 </div>
+
                 {isOfficialTab && (
-                    <div className="sm-tabs" style={{ marginTop: '12px', fontSize: '10px' }}>
-                        <button
-                            type="button"
-                            style={{ width: '25%' }}
-                            className={classNames('sm-tab', 'sm-tab-large', { 'sm-selected': qualityDefinition === fastPrintDefinition })}
-                            onClick={() => {
-                                this.actions.onSelectOfficialDefinition(fastPrintDefinition);
-                            }}
-                        >
-                            {i18n._('Fast Print')}
-                        </button>
-                        <button
-                            type="button"
-                            style={{ width: '25%' }}
-                            className={classNames('sm-tab', 'sm-tab-large', { 'sm-selected': qualityDefinition === normalQualityDefinition })}
-                            onClick={() => {
-                                this.actions.onSelectOfficialDefinition(normalQualityDefinition);
-                            }}
-                        >
-                            {i18n._('Normal Quality')}
-                        </button>
-                        <button
-                            type="button"
-                            style={{ width: '25%' }}
-                            className={classNames('sm-tab', 'sm-tab-large', { 'sm-selected': qualityDefinition === highQualityDefinition })}
-                            onClick={() => {
-                                this.actions.onSelectOfficialDefinition(highQualityDefinition);
-                            }}
-                        >
-                            {i18n._('High Quality')}
-                        </button>
-                        <button
-                            type="button"
-                            style={{ width: '25%' }}
-                            className={classNames('sm-tab', 'sm-tab-large', { 'sm-selected': qualityDefinition === raceQualityDefinition })}
-                            onClick={() => {
-                                this.actions.onSelectOfficialDefinition(raceQualityDefinition);
-                            }}
-                        >
-                            {i18n._('Race Mode')}
-                        </button>
+                    <div className={styles['configuration-options']} style={{ marginTop: '12px', fontSize: '10px' }}>
+                        <div className={styles['preset-options']}>
+                            <div className={styles['options-btn-list']}>
+                                <button
+                                    type="button"
+                                    style={{ width: '25%' }}
+                                    className={classNames(styles['options-btn'], { [styles.selected]: qualityDefinition === fastPrintDefinition })}
+                                    onClick={() => {
+                                        this.actions.onSelectOfficialDefinition(fastPrintDefinition);
+                                    }}
+                                >
+                                    {i18n._('Fast Print')}
+                                </button>
+                                <button
+                                    type="button"
+                                    style={{ width: '25%' }}
+                                    className={classNames(styles['options-btn'], { [styles.selected]: qualityDefinition === normalQualityDefinition })}
+                                    onClick={() => {
+                                        this.actions.onSelectOfficialDefinition(normalQualityDefinition);
+                                    }}
+                                >
+                                    {i18n._('Normal Quality')}
+                                </button>
+                                <button
+                                    type="button"
+                                    style={{ width: '25%' }}
+                                    className={classNames(styles['options-btn'], { [styles.selected]: qualityDefinition === highQualityDefinition })}
+                                    onClick={() => {
+                                        this.actions.onSelectOfficialDefinition(highQualityDefinition);
+                                    }}
+                                >
+                                    {i18n._('High Quality')}
+                                </button>
+                                <button
+                                    type="button"
+                                    style={{ width: '25%' }}
+                                    className={classNames(styles['options-btn'], { [styles.selected]: qualityDefinition === raceQualityDefinition })}
+                                    onClick={() => {
+                                        this.actions.onSelectOfficialDefinition(raceQualityDefinition);
+                                    }}
+                                >
+                                    {i18n._('Race Mode')}
+                                </button>
+                            </div>
+                            <div>
+                                <Anchor
+                                    className={styles['btn-expand']}
+                                    onClick={() => this.actions.toggleShowCustom()}
+                                >
+                                    {showCustomOptions && <i className="fa fa-fw fa-chevron-up" />}
+                                    {!showCustomOptions && <i className="fa fa-fw fa-chevron-down" />}
+                                </Anchor>
+                            </div>
+                        </div>
                     </div>
                 )}
                 {isOfficialTab && (
-                    <div className="sm-tabs" style={{ marginTop: '12px', fontSize: '10px' }}>
+                    <div className="rose-tabs" style={{ marginTop: '12px', fontSize: '10px' }}>
                         <button
                             type="button"
                             style={{ width: '33%' }}
-                            className={classNames('sm-tab', 'sm-tab-large', { 'sm-selected': SupportDefinition === 'none' })}
+                            className={classNames('rose-tab', { 'rose-selected': SupportDefinition === 'none' })}
                             onClick={() => {
                                 this.actions.onChangeSupportDefinition('support_enable', false);
                             }}
@@ -498,7 +519,7 @@ class Configurations extends PureComponent {
                         <button
                             type="button"
                             style={{ width: '33%' }}
-                            className={classNames('sm-tab', 'sm-tab-large', { 'sm-selected': SupportDefinition === 'buildplate' })}
+                            className={classNames('rose-tab', { 'rose-selected': SupportDefinition === 'buildplate' })}
                             onClick={() => {
                                 this.actions.onChangeSupportDefinition('support_enable', true);
                                 this.actions.onChangeSupportDefinition('support_type', 'buildplate');
@@ -509,7 +530,7 @@ class Configurations extends PureComponent {
                         <button
                             type="button"
                             style={{ width: '33%' }}
-                            className={classNames('sm-tab', 'sm-tab-large', { 'sm-selected': SupportDefinition === 'everywhere' })}
+                            className={classNames('rose-tab', { 'rose-selected': SupportDefinition === 'everywhere' })}
                             onClick={() => {
                                 this.actions.onChangeSupportDefinition('support_enable', true);
                                 this.actions.onChangeSupportDefinition('support_type', 'everywhere');
