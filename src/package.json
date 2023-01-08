@@ -12,6 +12,7 @@
   },
   "main": "main.js",
   "dependencies": {
+    "@electron/remote": "^2.0.9",
     "async": "~2.5.0",
     "babel-polyfill": "~6.26.0",
     "babel-runtime": "~6.26.0",

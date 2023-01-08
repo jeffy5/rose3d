@@ -1,6 +1,7 @@
 /* eslint import/no-unresolved: 0 */
 import 'babel-polyfill';
 import { app, Menu, BrowserWindow, ipcMain, dialog } from 'electron';
+import { enable as electronEnable, initialize as electronRemoteMainInitialize } from '@electron/remote/main';
 import { configureWindow } from './electron-app/window';
 import getMenuTemplate from './electron-app/Menu';
 import launchServer from './server-cli';
@@ -22,11 +23,16 @@ function openBrowserWindow(url) {
         show: false,
         webPreferences: {
             nodeIntegration: true,
-            enableRemoteModule: true
+            contextIsolation: false,
+            enableRemoteModule: true,
+            nodeIntegrationInWorker: true
         }
     });
 
     configureWindow(window);
+
+    electronRemoteMainInitialize();
+    electronEnable(window.webContents);
 
     // Ignore proxy settings
     // https://electronjs.org/docs/api/session#sessetproxyconfig-callback
