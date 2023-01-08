@@ -57,9 +57,7 @@ class PrintableCube extends Object3D {
         this.add(back);
 
 
-        // Add logo
-        const minSideLength = Math.min(this.size.x, this.size.y);
-
+        // Bottom background
         const geometry2 = new PlaneGeometry(this.size.x, this.size.y);
         const material2 = new MeshBasicMaterial({
             color: '#f0f0f0'
@@ -67,6 +65,17 @@ class PrintableCube extends Object3D {
         const mesh2 = new Mesh(geometry2, material2);
         mesh2.rotateX(-Math.PI / 2);
         this.add(mesh2);
+
+        const geometryOuter = new PlaneGeometry(this.size.x + 30, this.size.y + 30);
+        const materialOuter = new MeshBasicMaterial({
+            color: '#f0f0f0'
+        });
+        const meshOuter = new Mesh(geometryOuter, materialOuter);
+        meshOuter.rotateX(-Math.PI / 2);
+        this.add(meshOuter);
+
+        // Add logo
+        const minSideLength = Math.min(this.size.x, this.size.y);
 
         const geometry = new PlaneGeometry(minSideLength / 7, minSideLength / 7);
         const texture = new TextureLoader().load('./images/rose-arrow.png', this.update);
