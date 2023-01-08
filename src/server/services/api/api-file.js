@@ -35,12 +35,12 @@ export const set = (req, res) => {
             });
         } else {
             res.status(500).send({
-                msg: `Failed to upload file`,
+                msg: 'Failed to upload file',
                 body: req.body,
                 files: req.files
             });
         }
-    } catch(err) {
+    } catch (err) {
         log.error(`Failed to upload file: ${err.message} - ${err.stack}`);
         res.status(500).send({
             msg: `Failed to upload file: ${err}`
