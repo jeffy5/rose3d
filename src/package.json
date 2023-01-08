@@ -22,7 +22,7 @@
     "color-convert": "~2.0.0",
     "commander": "~2.16.0",
     "compression": "~1.7.3",
-    "connect-multiparty": "~2.1.1",
+    "connect-multiparty": "^2.2.0",
     "connect-restreamer": "~1.0.3",
     "consolidate": "~0.15.1",
     "cookie-parser": "~1.4.3",
