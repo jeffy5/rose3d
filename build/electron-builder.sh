@@ -20,10 +20,10 @@ fi
 
 pushd "$__dirname/../dist/rose3d"
 echo "Cleaning up \"`pwd`/node_modules\""
-rm -rf node_modules
+# rm -rf node_modules
 echo "Installing packages..."
-npm install --production
-npm dedupe
+# ELECTRON_GET_USE_PROXY=1 npm install --production
+# npm dedupe
 popd
 
 echo "Rebuild native modules using electron ${electron_version}"

@@ -14,23 +14,38 @@ const log = logger('api:file');
 export const set = (req, res) => {
     let { uploadName } = req.body;
     const file = req.files.file;
-    const originalName = path.basename(file.name);
-    if (!uploadName) {
-        uploadName = pathWithRandomSuffix(originalName);
-    }
-    const uploadPath = `${DataStorage.tmpDir}/${uploadName}`;
+    try {
+        if (file) {
+            const originalName = path.basename(file.name);
+            if (!uploadName) {
+                uploadName = pathWithRandomSuffix(originalName);
+            }
+            const uploadPath = `${DataStorage.tmpDir}/${uploadName}`;
 
-    mv(file.path, uploadPath, (err) => {
-        if (err) {
-            log.error(`Failed to upload file ${originalName}`);
-        } else {
-            res.send({
-                originalName,
-                uploadName
+            mv(file.path, uploadPath, (err) => {
+                if (err) {
+                    log.error(`Failed to upload file ${originalName}`);
+                } else {
+                    res.send({
+                        originalName,
+                        uploadName
+                    });
+                    res.end();
+                }
             });
-            res.end();
+        } else {
+            res.status(500).send({
+                msg: `Failed to upload file`,
+                body: req.body,
+                files: req.files
+            });
         }
-    });
+    } catch(err) {
+        log.error(`Failed to upload file: ${err.message} - ${err.stack}`);
+        res.status(500).send({
+            msg: `Failed to upload file: ${err}`
+        });
+    }
 };
 
 export const uploadCaseFile = (req, res) => {

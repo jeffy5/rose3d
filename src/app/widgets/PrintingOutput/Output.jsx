@@ -38,7 +38,6 @@ if (isElectron()) {
 
 class Output extends PureComponent {
     static propTypes = {
-        setTitle: PropTypes.func.isRequired,
         minimized: PropTypes.bool.isRequired,
 
         modelGroup: PropTypes.object.isRequired,
@@ -155,11 +154,6 @@ class Output extends PureComponent {
         }
     };
 
-    constructor(props) {
-        super(props);
-        this.props.setTitle(i18n._('Output'));
-    }
-
     render() {
         const state = this.state;
         const actions = this.actions;
@@ -169,7 +163,7 @@ class Output extends PureComponent {
         const { isAnyModelOverstepped } = this.props;
 
         return (
-            <div style={{ paddingBottom: '20px' }}>
+            <div>
                 <div>
                     {false && (
                         <table style={{ width: '100%', marginTop: '10px' }}>

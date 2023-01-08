@@ -92,8 +92,7 @@ class DataStorage {
                 const dst = path.join(this.configDir, file);
                 if (fs.statSync(src)
                     .isFile()) {
-                    fs.copyFileSync(src, dst, () => {
-                    });
+                    fs.copyFileSync(src, dst);
                 } else {
                     const srcPath = `${CURA_ENGINE_CONFIG_LOCAL}/${file}`;
                     const dstPath = `${this.configDir}/${file}`;
@@ -114,8 +113,7 @@ class DataStorage {
                 const dst = path.join(this.fontDir, file);
                 if (fs.statSync(src)
                     .isFile()) {
-                    fs.copyFileSync(src, dst, () => {
-                    });
+                    fs.copyFileSync(src, dst);
                 }
             }
         }

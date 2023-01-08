@@ -6,7 +6,6 @@ import classNames from 'classnames';
 import includes from 'lodash/includes';
 import Anchor from '../../components/Anchor';
 import Notifications from '../../components/Notifications';
-import OptionalDropdown from '../../components/OptionalDropdown';
 import TipTrigger from '../../components/TipTrigger';
 import { NumberInput as Input } from '../../components/Input';
 import i18n from '../../lib/i18n';
@@ -18,14 +17,59 @@ import styles from './styles.styl';
 
 const OFFICIAL_CONFIG_KEYS = [
     'layer_height',
-    'top_thickness',
+    'speed_print',
     'infill_sparse_density',
-    // 'speed_print',
-    'speed_infill',
-    'speed_wall_0',
-    'speed_wall_x',
-    'speed_travel'
+    'support_type',
+    'top_thickness'
 ];
+
+const officialConfigMap = {
+    layer_height: {
+        showValue: true,
+        option: 1,
+        options: [
+            { label: 'Fine', value: 0 },
+            { label: 'Media', value: 1 },
+            { label: 'Rough', value: 2 }
+        ]
+    },
+    speed_print: {
+        showValue: true,
+        option: 0,
+        options: [
+            { label: 'Slow', value: 0 },
+            { label: 'Medium', value: 1 },
+            { label: 'Fast', value: 2 }
+        ]
+    },
+    infill_sparse_density: {
+        showValue: true,
+        option: 1,
+        options: [
+            { label: 'Thin', value: 0 },
+            { label: 'Medium', value: 1 },
+            { label: 'Strong', value: 2 }
+        ]
+    },
+    support_type: {
+        showValue: false,
+        option: 2,
+        options: [
+            { label: 'Build Plate', value: 0 },
+            { label: 'Everywhere', value: 1 },
+            { label: 'None', value: 2 }
+        ]
+    },
+    top_thickness: {
+        showValue: false,
+        option: 2,
+        options: [
+            { label: 'Skirt', value: 0 },
+            { label: 'Brim', value: 1 },
+            { label: 'Raft', value: 2 }
+        ]
+    }
+};
 
 
 function isDefinitionEditable(definition) {
@@ -60,7 +104,6 @@ class Configurations extends PureComponent {
     state = {
         // control UI
         notificationMessage: '',
-        showOfficialConfigDetails: false,
 
         isOfficialTab: true,
         officialQualityDefinition: null,
@@ -424,29 +467,6 @@ class Configurations extends PureComponent {
 
         return (
             <div className={styles['configuration-options-container']}>
-                <div className="rose-tabs" style={{ marginTop: '6px', marginBottom: '12px' }}>
-                    <button
-                        type="button"
-                        style={{ width: '50%' }}
-                        className={classNames('rose-tab', { 'rose-selected': isOfficialTab })}
-                        onClick={() => {
-                            this.actions.onSetOfficoalTab(true);
-                        }}
-                    >
-                        {i18n._('DEFAULT')}
-                    </button>
-                    <button
-                        type="button"
-                        style={{ width: '50%' }}
-                        className={classNames('rose-tab', { 'rose-selected': !isOfficialTab })}
-                        onClick={() => {
-                            this.actions.onSetOfficoalTab(false);
-                        }}
-                    >
-                        {i18n._('CUSTOMIZE')}
-                    </button>
-                </div>
-
                 {isOfficialTab && (
                     <div className={styles['configuration-options']} style={{ marginTop: '12px', fontSize: '10px' }}>
                         <div className={styles['preset-options']}>
@@ -504,7 +524,7 @@ class Configurations extends PureComponent {
                         </div>
                     </div>
                 )}
-                {isOfficialTab && (
+                {isOfficialTab && false && (
                     <div className="rose-tabs" style={{ marginTop: '12px', fontSize: '10px' }}>
                         <button
                             type="button"
@@ -541,40 +561,54 @@ class Configurations extends PureComponent {
                     </div>
                 )}
                 {isOfficialTab && (
-                    <div style={{ marginTop: '12px', marginBottom: '6px' }}>
-                        <OptionalDropdown
-                            title={i18n._('Show Details')}
-                            hidden={!state.showOfficialConfigDetails}
-                            onClick={() => {
-                                this.setState({ showOfficialConfigDetails: !state.showOfficialConfigDetails });
-                            }}
-                        >
-                            {state.showOfficialConfigDetails && (
-                                <table className={styles['config-details-table']}>
-                                    <tbody>
-                                        {OFFICIAL_CONFIG_KEYS.map((key) => {
-                                            const setting = qualityDefinition.settings[key];
-                                            const { label, unit } = setting;
-                                            const defaultValue = setting.default_value;
-
-                                            return (
-                                                <tr key={key}>
-                                                    <td>{i18n._(label)}</td>
-                                                    <td>
-                                                        {defaultValue}
-                                                        {unit}
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
-                                    </tbody>
-                                </table>
-                            )}
-                        </OptionalDropdown>
+                    <div className={styles['config-container']}>
+                        <div className={styles['config-header']}>
+                            <span>{i18n._(qualityDefinition.name)}</span>
+                        </div>
+                        <div className={styles['config-list']}>
+                            {OFFICIAL_CONFIG_KEYS.map((key) => {
+                                const setting = qualityDefinition.settings[key];
+                                const { label, unit, default_value: defaultValue } = setting;
+                                return (
+                                    <div className={styles['config-item']} key={key}>
+                                        <div className={styles['config-item-header']}>
+                                            <span>{i18n._(label)}</span>
+                                            {officialConfigMap[key].showValue && <span>{defaultValue}{unit}</span>}
+                                        </div>
+                                        <div className={styles['config-item-form']}>
+                                            <div className="rose-tabs" style={{ marginTop: '6px', marginBottom: '12px' }}>
+                                                {officialConfigMap[key].options.map((option) => {
+                                                    return (
+                                                        <button
+                                                            type="button"
+                                                            style={{ width: '33%' }}
+                                                            className={classNames('rose-tab', { 'rose-selected': officialConfigMap[key].option === option.value })}
+                                                            onClick={() => {
+                                                            }}
+                                                            key={option.value}
+                                                        >
+                                                            {option.label}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <div className={styles['config-footer']}>
+                            <button
+                                type="button"
+                                onClick={() => this.actions.onSetOfficoalTab(false)}
+                            >
+                                {i18n._('CUSTOMIZE')}
+                            </button>
+                        </div>
                     </div>
                 )}
                 {!isOfficialTab && (
-                    <div style={{ marginBottom: '6px' }}>
+                    <div className={styles['custom-container']}>
                         <div>
                             <span style={{
                                 width: '100px',
@@ -595,7 +629,8 @@ class Configurations extends PureComponent {
                                     menuContainerStyle={{ zIndex: 5 }}
                                     name="profile"
                                     style={{
-                                        height: '30px'
+                                        height: 30,
+                                        borderRadius: 15
                                     }}
                                     options={customDefinitionOptions}
                                     placeholder=""
@@ -655,9 +690,13 @@ class Configurations extends PureComponent {
                         <div className="sm-parameter-container">
                             {this.state.customConfigGroup.map((group) => {
                                 return (
-                                    <div key={group.name}>
+                                    <div
+                                        key={group.name}
+                                        className={styles['custom-setting-group']}
+                                        style={{ paddingBottom: group.expanded ? 10 : 0 }}
+                                    >
                                         <Anchor
-                                            className="sm-parameter-header"
+                                            className={styles['custom-setting-group-header']}
                                             onClick={() => {
                                                 group.expanded = !group.expanded;
                                                 this.setState({
@@ -665,7 +704,6 @@ class Configurations extends PureComponent {
                                                 });
                                             }}
                                         >
-                                            <span className="fa fa-gear sm-parameter-header__indicator" />
                                             <span className="sm-parameter-header__title">{i18n._(group.name)}</span>
                                             <span className={classNames(
                                                 'fa',
@@ -675,6 +713,7 @@ class Configurations extends PureComponent {
                                             )}
                                             />
                                         </Anchor>
+                                        {group.expanded && <div className={styles.divider} />}
                                         {group.expanded && group.fields.map((key) => {
                                             const setting = qualityDefinition.settings[key];
 
@@ -745,31 +784,66 @@ class Configurations extends PureComponent {
                                                 });
                                             }
                                             return (
-                                                <TipTrigger title={i18n._(label)} content={i18n._(description)} key={key}>
-                                                    <div className="sm-parameter-row" key={key}>
-                                                        <span className="sm-parameter-row__label-lg">{i18n._(label)}</span>
+                                                <TipTrigger
+                                                    title={i18n._(label)}
+                                                    content={i18n._(description)}
+                                                    key={key}
+                                                    style={{ marginTop: 4 }}
+                                                >
+                                                    <div className={styles['custom-setting-item']} key={key}>
+                                                        <span style={{ fontWeight: 400 }}>{i18n._(label)}</span>
                                                         {type === 'float' && (
-                                                            <Input
-                                                                className="sm-parameter-row__input"
-                                                                value={defaultValue}
-                                                                disabled={!editable}
-                                                                onChange={(value) => {
-                                                                    actions.onChangeCustomDefinition(key, value);
-                                                                }}
-                                                            />
+                                                            <div>
+                                                                <Input
+                                                                    className="sm-parameter-row__input"
+                                                                    style={{ float: 'none', textAlign: 'right' }}
+                                                                    value={defaultValue}
+                                                                    disabled={!editable}
+                                                                    onChange={(value) => {
+                                                                        actions.onChangeCustomDefinition(key, value);
+                                                                    }}
+                                                                />
+                                                                <span
+                                                                    className="sm-parameter-row__input-unit"
+                                                                    style={{
+                                                                        float: 'none',
+                                                                        position: 'relative',
+                                                                        right: 0,
+                                                                        width: 40,
+                                                                        textAlign: 'right',
+                                                                        display: 'inline-block'
+                                                                    }}
+                                                                >
+                                                                    {unit}
+                                                                </span>
+                                                            </div>
                                                         )}
-                                                        {type === 'float' && <span className="sm-parameter-row__input-unit">{unit}</span>}
                                                         {type === 'int' && (
-                                                            <Input
-                                                                className="sm-parameter-row__input"
-                                                                value={defaultValue}
-                                                                disabled={!editable}
-                                                                onChange={(value) => {
-                                                                    actions.onChangeCustomDefinition(key, value);
-                                                                }}
-                                                            />
+                                                            <div>
+                                                                <Input
+                                                                    className="sm-parameter-row__input"
+                                                                    style={{ float: 'none', textAlign: 'right' }}
+                                                                    value={defaultValue}
+                                                                    disabled={!editable}
+                                                                    onChange={(value) => {
+                                                                        actions.onChangeCustomDefinition(key, value);
+                                                                    }}
+                                                                />
+                                                                <span
+                                                                    className="sm-parameter-row__input-unit"
+                                                                    style={{
+                                                                        float: 'none',
+                                                                        position: 'relative',
+                                                                        right: 0,
+                                                                        width: 40,
+                                                                        textAlign: 'right',
+                                                                        display: 'inline-block'
+                                                                    }}
+                                                                >
+                                                                    {unit}
+                                                                </span>
+                                                            </div>
                                                         )}
-                                                        {type === 'int' && <span className="sm-parameter-row__input-unit">{unit}</span>}
                                                         {type === 'bool' && (
                                                             <input
                                                                 className="sm-parameter-row__checkbox"
@@ -782,6 +856,11 @@ class Configurations extends PureComponent {
                                                         {type === 'enum' && (
                                                             <Select
                                                                 className="sm-parameter-row__select"
+                                                                style={{
+                                                                    height: 30,
+                                                                    borderRadius: 15,
+                                                                    fontSize: 12
+                                                                }}
                                                                 backspaceRemoves={false}
                                                                 clearable={false}
                                                                 menuContainerStyle={{ zIndex: 5 }}
@@ -804,7 +883,14 @@ class Configurations extends PureComponent {
                                 );
                             })}
                         </div>
-                        <div className={widgetStyles.separator} />
+                        <div className={styles['custom-footer']}>
+                            <button
+                                type="button"
+                                onClick={() => this.actions.onSetOfficoalTab(true)}
+                            >
+                                {i18n._('DEFAULT')}
+                            </button>
+                        </div>
                     </div>
                 )}
             </div>
