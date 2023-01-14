@@ -68,12 +68,12 @@ class MachineSelectModal extends PureComponent {
             {
                 value: MACHINE_SERIES.ORIGINAL.value,
                 label: MACHINE_SERIES.ORIGINAL.label,
-                img: 'images/rose/rose.png'
+                img: 'images/machine/rose-go.png'
             },
             {
                 value: MACHINE_SERIES.RoseX.value,
                 label: MACHINE_SERIES.RoseX.label,
-                img: 'images/rose-logo-256x256.png'
+                img: 'images/machine/rose-pro.png'
             }
         ];
 

@@ -179,7 +179,7 @@ class VisualizerModelTransformation extends PureComponent {
                         multiple={false}
                         onChange={actions.onChangeFile}
                     />
-                    <view
+                    <div
                         style={{
                             height: 1,
                             width: 40,

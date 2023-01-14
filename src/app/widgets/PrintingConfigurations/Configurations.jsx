@@ -108,7 +108,7 @@ class Configurations extends PureComponent {
         setTitle: PropTypes.func.isRequired,
         isAdvised: PropTypes.bool.isRequired,
         // series: PropTypes.string.isRequired,
-        activeDefinition: PropTypes.string.isRequired,
+        activeDefinition: PropTypes.object.isRequired,
         defaultQualityId: PropTypes.string.isRequired,
         qualityDefinitions: PropTypes.array.isRequired,
         updateDefinitionSettings: PropTypes.func.isRequired,
@@ -620,7 +620,7 @@ class Configurations extends PureComponent {
                                                                     }
                                                                 }
                                                             }}
-                                                            key={option.value}
+                                                            key={option.label}
                                                         >
                                                             {option.label}
                                                         </button>
