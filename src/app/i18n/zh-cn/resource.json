@@ -538,7 +538,7 @@
     "Greyscale": "",
     "Vector": "",
     "Bed": "",
-    "Slicing...{{progress}}%": "",
+    "Slicing...": "",
     "Previewed G-code successfully.": "",
     "Failed to upload model": "",
     "Automatic detection": "",

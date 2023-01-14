@@ -1,0 +1,37 @@
+@import "../../containers/variables.styl"
+.modal-overlay
+    position: fixed
+    z-index: 999
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    background-color: #00000080
+    display: flex
+    justify-content: center
+    align-items: flex-end
+    padding-bottom: 16px
+
+    .progress-dialog-container
+        background: #FFFFFF
+        border-radius: 40px
+        padding: 16px 32px
+
+        .progress-info
+            display: flex
+            justify-content: space-between
+            align-items: flex-end
+            font-size: 16px
+            color: #3D3D3D
+
+        .progress-bar-bg
+            background: #D8D8D8
+            width: 500px
+            height: 8px
+            border-radius: 4px
+            margin-top: 16px
+
+            .progress-bar
+                background: $brand-primary
+                border-radius: 4px
+                height: 8px

@@ -12,6 +12,7 @@ import { actions as printingActions, PRINTING_STAGE } from '../../flux/printing'
 import Thumbnail from './Thumbnail';
 import ModelExporter from '../PrintingVisualizer/ModelExporter';
 import { DATA_PREFIX } from '../../constants';
+import styles from './styles.styl';
 
 if (isElectron()) {
     const { ipcRenderer } = window.require('electron');
@@ -232,10 +233,10 @@ class Output extends PureComponent {
                         </table>
                     )}
                     <div style={{ background: '#3D3D3D', display: 'flex', justifyContent: 'center', alignItems: 'center', height: 46 }}>
-                        <div className="rose-tabs rose-large" style={{ width: 190 }}>
+                        <div className={styles['output-btns-container']} style={{ width: 190 }}>
                             <button
                                 type="button"
-                                className="rose-tab rose-selected"
+                                className={styles['output-btn']}
                                 onClick={actions.onClickGenerateGcode}
                                 disabled={!hasModel || isSlicing || isAnyModelOverstepped}
                             >
@@ -243,7 +244,7 @@ class Output extends PureComponent {
                             </button>
                             <button
                                 type="button"
-                                className="rose-tab"
+                                className={styles['output-btn']}
                                 onClick={actions.onClickExportGcode}
                                 disabled={!gcodeLine}
                             >

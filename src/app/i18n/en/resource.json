@@ -536,7 +536,7 @@
     "Bed": "Bed",
     "Slice": "Slice",
     "Save To File": "Save To File",
-    "Slicing...{{progress}}%": "Slicing...{{progress}}%",
+    "Slicing...": "Slicing...",
     "Previewed G-code successfully.": "Previewed G-code successfully.",
     "Failed to upload model": "Failed to upload model",
     "Automatic detection": "Automatic detection",

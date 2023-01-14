@@ -26,47 +26,66 @@ const OFFICIAL_CONFIG_KEYS = [
 const officialConfigMap = {
     layer_height: {
         showValue: true,
-        option: 1,
         options: [
-            { label: 'Fine', value: 0 },
-            { label: 'Media', value: 1 },
-            { label: 'Rough', value: 2 }
+            { label: 'Fine', value: 0.12 },
+            { label: 'Media', value: 0.08 },
+            { label: 'Rough', value: 0.02 }
         ]
     },
     speed_print: {
         showValue: true,
-        option: 0,
         options: [
-            { label: 'Slow', value: 0 },
-            { label: 'Medium', value: 1 },
-            { label: 'Fast', value: 2 }
+            { label: 'Slow', value: 60 },
+            { label: 'Medium', value: 90 },
+            { label: 'Fast', value: 120 }
         ]
     },
     infill_sparse_density: {
         showValue: true,
-        option: 1,
         options: [
-            { label: 'Thin', value: 0 },
-            { label: 'Medium', value: 1 },
-            { label: 'Strong', value: 2 }
+            { label: 'Thin', value: 5 },
+            { label: 'Medium', value: 10 },
+            { label: 'Strong', value: 20 }
         ]
     },
     support_type: {
         showValue: false,
-        option: 2,
         options: [
-            { label: 'Build Plate', value: 0 },
-            { label: 'Everywhere', value: 1 },
-            { label: 'None', value: 2 }
-        ]
+            {
+                label: 'Build Plate',
+                value: 'buildplate',
+                deps: [
+                    { key: 'support_enable', value: true }
+                ]
+            },
+            {
+                label: 'Everywhere',
+                value: 'everywhere',
+                deps: [
+                    { key: 'support_enable', value: true }
+                ]
+            },
+            {
+                label: 'None',
+                deps: [
+                    { key: 'support_enable', value: false }
+                ]
+            }
+        ],
+        checkSelected: (optionValue, settingValue, settings) => {
+            if (!optionValue) {
+                // None 是否没支撑
+                return !settings.support_enable.default_value;
+            }
+            return settings.support_enable.default_value && optionValue === settingValue;
+        }
     },
     top_thickness: {
         showValue: false,
-        option: 2,
         options: [
-            { label: 'Skirt', value: 0 },
-            { label: 'Brim', value: 1 },
-            { label: 'Raft', value: 2 }
+            { label: 'Skirt', value: 0.8 },
+            { label: 'Brim', value: 1.2 },
+            { label: 'Raft', value: 1.6 }
         ]
     }
 };
@@ -89,6 +108,7 @@ class Configurations extends PureComponent {
         setTitle: PropTypes.func.isRequired,
         isAdvised: PropTypes.bool.isRequired,
         // series: PropTypes.string.isRequired,
+        activeDefinition: PropTypes.string.isRequired,
         defaultQualityId: PropTypes.string.isRequired,
         qualityDefinitions: PropTypes.array.isRequired,
         updateDefinitionSettings: PropTypes.func.isRequired,
@@ -232,10 +252,10 @@ class Configurations extends PureComponent {
                 isOfficialTab: true,
                 officialQualityDefinition: definition
             });
-            // this.actions.onChangeSupportDefinition(definition.)
+            // this.actions.onChangeDefinitionTemporary(definition.)
             this.props.updateDefaultQualityId(definition.definitionId);
             this.props.updateActiveDefinition(definition);
-            this.actions.onChangeSupportDefinition(this.state.supportKey, this.state.supportValue);
+            this.actions.onChangeDefinitionTemporary(this.state.supportKey, this.state.supportValue);
         },
         onSelectCustomDefinitionById: (definitionId) => {
             const definition = this.props.qualityDefinitions.find(d => d.definitionId === definitionId);
@@ -316,7 +336,7 @@ class Configurations extends PureComponent {
                 }
             });
         },
-        onChangeSupportDefinition: (key, value) => {
+        onChangeDefinitionTemporary: (key, value) => {
             const definition = this.state.customQualityDefinition;
 
             definition.settings[key].default_value = value;
@@ -458,6 +478,7 @@ class Configurations extends PureComponent {
 
         const { isOfficialTab, officialQualityDefinition, customQualityDefinition, customDefinitionOptions, SupportDefinition, showCustomOptions } = this.state;
         const qualityDefinition = isOfficialTab ? officialQualityDefinition : customQualityDefinition;
+        const activeDefinition = this.props.activeDefinition;
 
         if (!qualityDefinition) {
             return null;
@@ -468,7 +489,7 @@ class Configurations extends PureComponent {
         return (
             <div className={styles['configuration-options-container']}>
                 {isOfficialTab && (
-                    <div className={styles['configuration-options']} style={{ marginTop: '12px', fontSize: '10px' }}>
+                    <div className={styles['configuration-options']} style={{ fontSize: '10px' }}>
                         <div className={styles['preset-options']}>
                             <div className={styles['options-btn-list']}>
                                 <button
@@ -512,7 +533,7 @@ class Configurations extends PureComponent {
                                     {i18n._('Race Mode')}
                                 </button>
                             </div>
-                            <div>
+                            <div style={{ display: 'none' }}>
                                 <Anchor
                                     className={styles['btn-expand']}
                                     onClick={() => this.actions.toggleShowCustom()}
@@ -531,7 +552,7 @@ class Configurations extends PureComponent {
                             style={{ width: '33%' }}
                             className={classNames('rose-tab', { 'rose-selected': SupportDefinition === 'none' })}
                             onClick={() => {
-                                this.actions.onChangeSupportDefinition('support_enable', false);
+                                this.actions.onChangeDefinitionTemporary('support_enable', false);
                             }}
                         >
                             {i18n._('None')}
@@ -541,8 +562,8 @@ class Configurations extends PureComponent {
                             style={{ width: '33%' }}
                             className={classNames('rose-tab', { 'rose-selected': SupportDefinition === 'buildplate' })}
                             onClick={() => {
-                                this.actions.onChangeSupportDefinition('support_enable', true);
-                                this.actions.onChangeSupportDefinition('support_type', 'buildplate');
+                                this.actions.onChangeDefinitionTemporary('support_enable', true);
+                                this.actions.onChangeDefinitionTemporary('support_type', 'buildplate');
                             }}
                         >
                             {i18n._('Touching Buildplate')}
@@ -552,8 +573,8 @@ class Configurations extends PureComponent {
                             style={{ width: '33%' }}
                             className={classNames('rose-tab', { 'rose-selected': SupportDefinition === 'everywhere' })}
                             onClick={() => {
-                                this.actions.onChangeSupportDefinition('support_enable', true);
-                                this.actions.onChangeSupportDefinition('support_type', 'everywhere');
+                                this.actions.onChangeDefinitionTemporary('support_enable', true);
+                                this.actions.onChangeDefinitionTemporary('support_type', 'everywhere');
                             }}
                         >
                             {i18n._('Everywhere')}
@@ -567,23 +588,37 @@ class Configurations extends PureComponent {
                         </div>
                         <div className={styles['config-list']}>
                             {OFFICIAL_CONFIG_KEYS.map((key) => {
-                                const setting = qualityDefinition.settings[key];
+                                const settings = activeDefinition.settings;
+                                const setting = settings[key];
                                 const { label, unit, default_value: defaultValue } = setting;
+
+                                const officialConfig = officialConfigMap[key];
                                 return (
                                     <div className={styles['config-item']} key={key}>
                                         <div className={styles['config-item-header']}>
                                             <span>{i18n._(label)}</span>
-                                            {officialConfigMap[key].showValue && <span>{defaultValue}{unit}</span>}
+                                            {officialConfig.showValue && <span>{defaultValue}{unit}</span>}
                                         </div>
                                         <div className={styles['config-item-form']}>
                                             <div className="rose-tabs" style={{ marginTop: '6px', marginBottom: '12px' }}>
-                                                {officialConfigMap[key].options.map((option) => {
+                                                {officialConfig.options.map((option) => {
                                                     return (
                                                         <button
                                                             type="button"
                                                             style={{ width: '33%' }}
-                                                            className={classNames('rose-tab', { 'rose-selected': officialConfigMap[key].option === option.value })}
+                                                            className={classNames('rose-tab', {
+                                                                'rose-selected': officialConfig.checkSelected
+                                                                    ? officialConfig.checkSelected(option.value, defaultValue, settings)
+                                                                    : defaultValue === option.value })}
                                                             onClick={() => {
+                                                                if (option.value) {
+                                                                    this.actions.onChangeDefinitionTemporary(key, option.value);
+                                                                }
+                                                                if (option.deps) {
+                                                                    for (const dep of option.deps) {
+                                                                        this.actions.onChangeDefinitionTemporary(dep.key, dep.value);
+                                                                    }
+                                                                }
                                                             }}
                                                             key={option.value}
                                                         >

@@ -5,7 +5,7 @@ import isEqual from 'lodash/isEqual';
 import { Vector3, Box3 } from 'three';
 import { EPSILON } from '../../constants';
 import i18n from '../../lib/i18n';
-import ProgressBar from '../../components/ProgressBar';
+import RoseProgressBar from '../../components/RoseProgressBar';
 import ContextMenu from '../../components/ContextMenu';
 import Canvas from '../../components/SMCanvas';
 // import SecondaryToolbar from '../CanvasToolbar/SecondaryToolbar';
@@ -198,7 +198,7 @@ class Visualizer extends PureComponent {
     }
 
     getNotice() {
-        const { stage, progress } = this.props;
+        const { stage } = this.props;
         switch (stage) {
             case PRINTING_STAGE.EMPTY:
                 return '';
@@ -211,13 +211,13 @@ class Visualizer extends PureComponent {
             case PRINTING_STAGE.SLICE_PREPARING:
                 return i18n._('Preparing for slicing...');
             case PRINTING_STAGE.SLICING:
-                return i18n._('Slicing...{{progress}}%', { progress: (100.0 * progress).toFixed(1) });
+                return i18n._('Slicing');
             case PRINTING_STAGE.SLICE_SUCCEED:
                 return i18n._('Sliced model successfully.');
             case PRINTING_STAGE.SLICE_FAILED:
                 return i18n._('Failed to slice model.');
             case PRINTING_STAGE.PREVIEWING:
-                return i18n._('Previewing G-code...{{progress}}%', { progress: (100.0 * progress).toFixed(1) });
+                return i18n._('Previewing G-code...');
             case PRINTING_STAGE.PREVIEW_SUCCEED:
                 return i18n._('Previewed G-code successfully.');
             case PRINTING_STAGE.PREVIEW_FAILED:
@@ -270,12 +270,10 @@ class Visualizer extends PureComponent {
                     <VisualizerInfo />
                 </div>
 
-                <div className={styles['visualizer-notice']}>
-                    <p>{notice}</p>
-                </div>
-                <div className={styles['visualizer-progress']}>
-                    <ProgressBar progress={progress * 100} />
-                </div>
+                <RoseProgressBar
+                    tips={notice}
+                    progress={progress * 100}
+                />
 
                 <div className={styles['canvas-content']} style={{ top: 0 }}>
                     <Canvas

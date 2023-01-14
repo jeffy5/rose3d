@@ -160,7 +160,7 @@ class VisualizerModelTransformation extends PureComponent {
         const rotateZ = Number(toFixed(THREE.Math.radToDeg(rotationZ), 1));
         return (
             <React.Fragment>
-                <div className={classNames(styles['model-transformation__open'])}>
+                <div className={classNames(styles['model-transformation__container'])}>
                     <Anchor
                         componentClass="button"
                         className={classNames(
@@ -179,8 +179,15 @@ class VisualizerModelTransformation extends PureComponent {
                         multiple={false}
                         onChange={actions.onChangeFile}
                     />
-                </div>
-                <div className={classNames(styles['model-transformation__container'])}>
+                    <view
+                        style={{
+                            height: 1,
+                            width: 40,
+                            background: '#D8D8D8',
+                            display: 'block'
+                        }}
+                    />
+
                     <Anchor
                         componentClass="button"
                         className={classNames(
