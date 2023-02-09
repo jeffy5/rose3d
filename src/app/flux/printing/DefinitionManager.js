@@ -186,6 +186,7 @@ class DefinitionManager {
         //     gcode.push(`M140 S${bedTempLayer0}`);
         // }
         gcode.push(`M109 S${printTempLayer0};Wait for Hotend Temperature`);
+        gcode.push('M140 S{material_bed_temperature_layer_0} ; set final bed temp');
         gcode.push('G28 ;home');
         gcode.push('G90 ;absolute positioning');
         // gcode.push('G92 E0');

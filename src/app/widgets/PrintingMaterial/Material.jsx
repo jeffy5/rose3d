@@ -18,10 +18,10 @@ const MATERIAL_CONFIG_KEYS = [
     'material_flow',
     'material_print_temperature',
     'material_print_temperature_layer_0',
-    'material_final_print_temperature'
+    'material_final_print_temperature',
     // 'machine_heated_bed',
-    // 'material_bed_temperature',
-    // 'material_bed_temperature_layer_0'
+    'material_bed_temperature',
+    'material_bed_temperature_layer_0'
 ];
 // Only custom material is editable, changes on diameter is not allowed as well
 function isDefinitionEditable(definition, key) {
@@ -30,7 +30,9 @@ function isDefinitionEditable(definition, key) {
 }
 
 function isOfficialDefinition(definition) {
-    return includes(['material.pla'], definition.definitionId);
+    return includes([
+        'material.pla', 'material.abs', 'material.petg', 'material.tpu'
+    ], definition.definitionId);
 }
 
 class Material extends PureComponent {
@@ -130,7 +132,8 @@ class Material extends PureComponent {
             // Update options
             const materialDefinitionOptions = this.props.materialDefinitions.map(d => ({
                 label: d.name,
-                value: d.definitionId
+                value: d.definitionId,
+                isCustom: !d.metadata.readonly
             }));
 
             this.setState({

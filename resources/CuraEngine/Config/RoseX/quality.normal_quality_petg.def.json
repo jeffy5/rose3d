@@ -1,5 +1,5 @@
 {
-    "name": "Normal Quality(PLA)",
+    "name": "Normal Quality(PETG)",
     "version": 2,
     "inherits": "rose2",
     "overrides": {

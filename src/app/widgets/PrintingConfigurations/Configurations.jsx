@@ -95,10 +95,17 @@ function isDefinitionEditable(definition) {
     return !definition.metadata.readonly;
 }
 function isOfficialDefinition(definition) {
-    return includes(['quality.fast_print',
+    return includes([
+        'quality.fast_print',
         'quality.normal_quality',
         'quality.high_quality',
-        'quality.race_quality'], definition.definitionId);
+        'quality.race_quality',
+        'quality.fast_print_petg',
+        'quality.fast_print_tpu',
+        'quality.normal_quality_abs',
+        'quality.normal_quality_petg',
+        'quality.normal_quality_tpu'
+    ], definition.definitionId);
 }
 
 // config type: official ('fast print', 'normal quality', 'high quality'); custom: ...
@@ -485,6 +492,8 @@ class Configurations extends PureComponent {
         }
 
         const editable = isDefinitionEditable(qualityDefinition);
+
+        console.log('qualityDefinition', qualityDefinition);
 
         return (
             <div className={styles['configuration-options-container']}>
