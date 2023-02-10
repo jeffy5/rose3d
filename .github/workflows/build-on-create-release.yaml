@@ -60,7 +60,7 @@ jobs:
                   $PACKAGE_VERSION=node -e "console.log(require('./src/package.json').version)"
                   $RELEASE="${PACKAGE_NAME}-${PACKAGE_VERSION}"
 
-                  $INSTALLER_ASSET_PATH="./output/${PRODUCT_NAME} ${PACKAGE_VERSION}.exe"
+                  $INSTALLER_ASSET_PATH="./output/${PRODUCT_NAME} Setup ${PACKAGE_VERSION}.exe"
                   $INSTALLER_ASSET_DEFAULT_NAME="${RELEASE}.exe"
                   $INSTALLER_ASSET_NAME="${RELEASE}-win-x64.exe"
 
@@ -93,16 +93,16 @@ jobs:
                   asset_name: latest.yml
                   asset_content_type: text/plain
 
-            - name: Upload Release Asset - Windows x64 Installer (Auto Updates)
-              id: upload-release-asset-x64-au
-              uses: actions/upload-release-asset@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{ github.event.release.upload_url }}
-                  asset_path: ${{ env.INSTALLER_ASSET_PATH }}
-                  asset_name: ${{ env.INSTALLER_AU_ASSET_NAME }}
-                  asset_content_type: application/octet-stream
+            # - name: Upload Release Asset - Windows x64 Installer (Auto Updates)
+            #   id: upload-release-asset-x64-au
+            #   uses: actions/upload-release-asset@v1
+            #   env:
+            #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            #   with:
+            #       upload_url: ${{ github.event.release.upload_url }}
+            #       asset_path: ${{ env.INSTALLER_ASSET_PATH }}
+            #       asset_name: ${{ env.INSTALLER_AU_ASSET_NAME }}
+            #       asset_content_type: application/octet-stream
 
             # - name: Upload Release Windows x64 Installer To OSS
             #   if: github.repository == 'Snapmaker/Luban'
@@ -341,15 +341,15 @@ jobs:
                   asset_name: ${{ env.DEB_ASSET_NAME }}
                   asset_content_type: application/octet-stream
 
-            - name: Upload Release Asset - RPM
-              uses: actions/upload-release-asset@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{ github.event.release.upload_url }}
-                  asset_path: ${{ env.RPM_ASSET_PATH }}
-                  asset_name: ${{ env.RPM_ASSET_NAME }}
-                  asset_content_type: application/octet-stream
+            # - name: Upload Release Asset - RPM
+            #   uses: actions/upload-release-asset@v1
+            #   env:
+            #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            #   with:
+            #       upload_url: ${{ github.event.release.upload_url }}
+            #       asset_path: ${{ env.RPM_ASSET_PATH }}
+            #       asset_name: ${{ env.RPM_ASSET_NAME }}
+            #       asset_content_type: application/octet-stream
 
             - name: Upload Release Asset - TAR
               uses: actions/upload-release-asset@v1
