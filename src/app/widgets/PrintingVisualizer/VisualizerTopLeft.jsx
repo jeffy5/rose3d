@@ -87,6 +87,10 @@ class VisualizerTopLeft extends PureComponent {
         }
     };
 
+    componentDidMount() {
+        this.actions.onClick();
+    }
+
     render() {
         const actions = this.actions;
         const { canUndo, canRedo } = this.props;
