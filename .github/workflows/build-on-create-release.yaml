@@ -55,8 +55,8 @@ jobs:
             # https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable
             - name: Setting Environment Variables
               run: |
-                  $PRODUCT_NAME="rose3d"
-                  $PACKAGE_NAME="rose3d"
+                  $PRODUCT_NAME="Rose3D"
+                  $PACKAGE_NAME="Rose3D"
                   $PACKAGE_VERSION=node -e "console.log(require('./src/package.json').version)"
                   $RELEASE="${PACKAGE_NAME}-${PACKAGE_VERSION}"
 
@@ -297,8 +297,8 @@ jobs:
               run: npm run build:linux-x64
 
             - run: |
-                  PRODUCT_NAME="Super3D"
-                  PACKAGE_NAME="super3d"
+                  PRODUCT_NAME="Rose3D"
+                  PACKAGE_NAME="Rose3D"
                   PACKAGE_VERSION=`node -e "console.log(require('./src/package.json').version)"`
                   RELEASE=${PACKAGE_NAME}-${PACKAGE_VERSION}
 
@@ -308,8 +308,8 @@ jobs:
 
             - name: Setting Environment Variables
               run: |
-                  PRODUCT_NAME="Super3D"
-                  PACKAGE_NAME="super3d"
+                  PRODUCT_NAME="Rose3D"
+                  PACKAGE_NAME="Rose3D"
                   PACKAGE_VERSION=`node -e "console.log(require('./src/package.json').version)"`
                   RELEASE=${PACKAGE_NAME}-${PACKAGE_VERSION}
 
