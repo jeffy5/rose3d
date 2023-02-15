@@ -29,55 +29,55 @@ const officialConfigMap = {
         options: {
             pla: {
                 normal_quality: [
-                    { label: 'Fine', value: 0.2 },
+                    { label: 'Rough', value: 0.12 },
                     { label: 'Media', value: 0.16 },
-                    { label: 'Rough', value: 0.12 }
+                    { label: 'Fine', value: 0.2 }
                 ],
                 fast_print: [
-                    { label: 'Fine', value: 0.25 },
+                    { label: 'Rough', value: 0.16 },
                     { label: 'Media', value: 0.2 },
-                    { label: 'Rough', value: 0.16 }
+                    { label: 'Fine', value: 0.25 }
                 ],
                 high_quality: [
-                    { label: 'Fine', value: 0.12 },
+                    { label: 'Rough', value: 0.06 },
                     { label: 'Media', value: 0.08 },
-                    { label: 'Rough', value: 0.06 }
+                    { label: 'Fine', value: 0.12 }
                 ],
                 race_quality: [
-                    { label: 'Fine', value: 0.25 },
+                    { label: 'Rough', value: 0.16 },
                     { label: 'Media', value: 0.2 },
-                    { label: 'Rough', value: 0.16 }
+                    { label: 'Fine', value: 0.25 }
                 ]
             },
             tpu: {
                 normal_quality: [
-                    { label: 'Fine', value: 0.2 },
+                    { label: 'Rough', value: 0.12 },
                     { label: 'Media', value: 0.16 },
-                    { label: 'Rough', value: 0.12 }
+                    { label: 'Fine', value: 0.2 }
                 ],
                 fast_print: [
-                    { label: 'Fine', value: 0.25 },
+                    { label: 'Rough', value: 0.16 },
                     { label: 'Media', value: 0.2 },
-                    { label: 'Rough', value: 0.16 }
+                    { label: 'Fine', value: 0.25 }
                 ]
             },
             petg: {
                 normal_quality: [
-                    { label: 'Fine', value: 0.2 },
+                    { label: 'Rough', value: 0.12 },
                     { label: 'Media', value: 0.16 },
-                    { label: 'Rough', value: 0.12 }
+                    { label: 'Fine', value: 0.2 }
                 ],
                 fast_print: [
-                    { label: 'Fine', value: 0.25 },
+                    { label: 'Rough', value: 0.18 },
                     { label: 'Media', value: 0.2 },
-                    { label: 'Rough', value: 0.18 }
+                    { label: 'Fine', value: 0.25 }
                 ]
             },
             abs: {
                 normal_quality: [
-                    { label: 'Fine', value: 0.2 },
+                    { label: 'Rough', value: 0.16 },
                     { label: 'Media', value: 0.18 },
-                    { label: 'Rough', value: 0.16 }
+                    { label: 'Fine', value: 0.2 }
                 ]
             }
         }
