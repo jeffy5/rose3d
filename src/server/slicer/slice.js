@@ -32,13 +32,17 @@ let curaEnginePath;
 })();
 
 function callCuraEngine(series, modelPath, configPath, outputPath, modelPathLeft, modelPathRight) {
-    if (series === 'RoseX') {
-        return childProcess.spawn(
-            curaEnginePath,
-            ['slice', '-v', '-p', '-j', configPath, '-o', outputPath,
-                '-g', '-e0', '-l', modelPathLeft, '-e1', '-l', modelPathRight]
-        );
-    }
+    // const args = ['slice', '-v', '-p', '-j', configPath, '-o', outputPath,
+    //     '-g', '-e0', '-l', modelPathLeft, '-e1', '-l', modelPathRight];
+    // log.debug(`${curaEnginePath} ${args.join(' ')}`)
+    // if (series === 'RoseX') {
+    //     return childProcess.spawn(
+    //         curaEnginePath,
+    //         ['slice', '-v', '-p', '-j', configPath, '-o', outputPath,
+    //             '-g', '-e0', '-l', modelPathLeft, '-e1', '-l', modelPathRight]
+    //     );
+    // }
+    log.debug(`series ${series}`);
     return childProcess.spawn(
         curaEnginePath,
         ['slice', '-v', '-p', '-j', configPath, '-o', outputPath, '-l', modelPath]
