@@ -42,7 +42,7 @@ function callCuraEngine(series, modelPath, configPath, outputPath, modelPathLeft
     //             '-g', '-e0', '-l', modelPathLeft, '-e1', '-l', modelPathRight]
     //     );
     // }
-    log.debug(`series ${series}`);
+    log.debug(`series ${series} ${modelPathLeft} ${modelPathRight}`);
     return childProcess.spawn(
         curaEnginePath,
         ['slice', '-v', '-p', '-j', configPath, '-o', outputPath, '-l', modelPath]
