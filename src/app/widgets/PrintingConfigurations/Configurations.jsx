@@ -20,7 +20,7 @@ const OFFICIAL_CONFIG_KEYS = [
     'speed_wall_x',
     'infill_sparse_density',
     'support_type',
-    'top_thickness'
+    'adhesion_type'
 ];
 
 const officialConfigMap = {
@@ -416,60 +416,60 @@ const officialConfigMap = {
             return settings.support_enable.default_value && optionValue === settingValue;
         }
     },
-    top_thickness: {
+    adhesion_type: {
         showValue: false,
         options: {
             pla: {
                 normal_quality: [
-                    { label: 'Skirt', value: 0.8 },
-                    { label: 'Brim', value: 1.2 },
-                    { label: 'Raft', value: 1.6 }
+                    { label: 'Skirt', value: 'skirt' },
+                    { label: 'Brim', value: 'brim' },
+                    { label: 'None', value: 'none' }
                 ],
                 fast_print: [
-                    { label: 'Skirt', value: 0.8 },
-                    { label: 'Brim', value: 1.2 },
-                    { label: 'Raft', value: 1.6 }
+                    { label: 'Skirt', value: 'skirt' },
+                    { label: 'Brim', value: 'brim' },
+                    { label: 'None', value: 'none' }
                 ],
                 high_quality: [
-                    { label: 'Skirt', value: 0.8 },
-                    { label: 'Brim', value: 1.2 },
-                    { label: 'Raft', value: 1.6 }
+                    { label: 'Skirt', value: 'skirt' },
+                    { label: 'Brim', value: 'brim' },
+                    { label: 'None', value: 'none' }
                 ],
                 race_quality: [
-                    { label: 'Skirt', value: 0.8 },
-                    { label: 'Brim', value: 1.2 },
-                    { label: 'Raft', value: 1.6 }
+                    { label: 'Skirt', value: 'skirt' },
+                    { label: 'Brim', value: 'brim' },
+                    { label: 'None', value: 'none' }
                 ]
             },
             tpu: {
                 normal_quality: [
-                    { label: 'Skirt', value: 0.8 },
-                    { label: 'Brim', value: 1.2 },
-                    { label: 'Raft', value: 1.6 }
+                    { label: 'Skirt', value: 'skirt' },
+                    { label: 'Brim', value: 'brim' },
+                    { label: 'None', value: 'none' }
                 ],
                 fast_print: [
-                    { label: 'Skirt', value: 0.8 },
-                    { label: 'Brim', value: 1.2 },
-                    { label: 'Raft', value: 1.6 }
+                    { label: 'Skirt', value: 'skirt' },
+                    { label: 'Brim', value: 'brim' },
+                    { label: 'None', value: 'none' }
                 ]
             },
             petg: {
                 normal_quality: [
-                    { label: 'Skirt', value: 0.8 },
-                    { label: 'Brim', value: 1.2 },
-                    { label: 'Raft', value: 1.6 }
+                    { label: 'Skirt', value: 'skirt' },
+                    { label: 'Brim', value: 'brim' },
+                    { label: 'None', value: 'none' }
                 ],
                 fast_print: [
-                    { label: 'Skirt', value: 0.8 },
-                    { label: 'Brim', value: 1.2 },
-                    { label: 'Raft', value: 1.6 }
+                    { label: 'Skirt', value: 'skirt' },
+                    { label: 'Brim', value: 'brim' },
+                    { label: 'None', value: 'none' }
                 ]
             },
             abs: {
                 normal_quality: [
-                    { label: 'Skirt', value: 0.8 },
-                    { label: 'Brim', value: 1.2 },
-                    { label: 'Raft', value: 1.6 }
+                    { label: 'Skirt', value: 'skirt' },
+                    { label: 'Brim', value: 'brim' },
+                    { label: 'None', value: 'none' }
                 ]
             }
         }
@@ -562,6 +562,11 @@ class Configurations extends PureComponent {
                 fields: [
                     'layer_height',
                     'layer_height_0',
+                    'line_width',
+                    'wall_line_width_0',
+                    'wall_line_width_x',
+                    'skin_line_width',
+                    'infill_line_width',
                     'initial_layer_line_width_factor'
                 ]
             },
@@ -594,6 +599,17 @@ class Configurations extends PureComponent {
                     'speed_topbottom',
                     'speed_travel',
                     'speed_travel_layer_0'
+                ]
+            },
+            {
+                name: i18n._('Cooling'),
+                expanded: false,
+                fields: [
+                    'cool_fan_enabled',
+                    'cool_fan_speed_min',
+                    'cool_fan_speed_max',
+                    'cool_fan_full_at_height',
+                    'cool_fan_full_layer'
                 ]
             },
             {

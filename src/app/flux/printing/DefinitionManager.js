@@ -157,10 +157,10 @@ class DefinitionManager {
     addMachineStartGcode(definition) {
         const settings = definition.settings;
 
-        // const machineHeatedBed = settings.machine_heated_bed.default_value;
+        const machineHeatedBed = settings.machine_heated_bed.default_value;
         const printTemp = settings.material_print_temperature.default_value;
         const printTempLayer0 = settings.material_print_temperature_layer_0.default_value || printTemp;
-        // const bedTempLayer0 = settings.material_bed_temperature_layer_0.default_value;
+        const bedTempLayer0 = settings.material_bed_temperature_layer_0.default_value;
 
         /**
          * 1.set bed temperature and not wait to reach the target temperature
@@ -182,11 +182,10 @@ class DefinitionManager {
             ';Start GCode begin'
             // `M104 S${printTempLayer0}`
         ];
-        // if (machineHeatedBed) {
-        //     gcode.push(`M140 S${bedTempLayer0}`);
-        // }
         gcode.push(`M109 S${printTempLayer0};Wait for Hotend Temperature`);
-        gcode.push('M140 S{material_bed_temperature_layer_0} ; set final bed temp');
+        if (machineHeatedBed) {
+            gcode.push(`M140 S${bedTempLayer0}`);
+        }
         gcode.push('G28 ;home');
         gcode.push('G90 ;absolute positioning');
         // gcode.push('G92 E0');
