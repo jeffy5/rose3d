@@ -129,6 +129,26 @@
                 }
             }
         },
+        "cooling": {
+            "type": "category",
+            "children": {
+                "cool_fan_enabled": {
+                    "default_value": true
+                },
+                "cool_fan_speed_min": {
+                    "default_value": 100
+                },
+                "cool_fan_speed_max": {
+                    "default_value": 100
+                },
+                "cool_fan_full_at_height": {
+                    "default_value": 0.5
+                },
+                "cool_fan_full_layer": {
+                    "default_value": 2
+                }
+            }
+        },
         "travel": {
             "type": "category",
             "children": {

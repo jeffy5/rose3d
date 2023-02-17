@@ -31,7 +31,7 @@
             "default_value": 245
         },
         "machine_heated_bed": {
-            "default_value": false
+            "default_value": true
         },
         "machine_nozzle_size": {
             "default_value": 0.4
