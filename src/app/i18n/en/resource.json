@@ -727,5 +727,21 @@
     "Prime Tower Y Position": "Prime Tower Y Position",
     "The y coordinate of the position of the prime tower.": "The y coordinate of the position of the prime tower.",
     "Nozzle Switch Retraction Distance": "Nozzle Switch Retraction Distance",
-    "The amount of retraction when switching extruders. Set to 0 for no retraction at all. This should generally be the same as the length of the heat zone.": "The amount of retraction when switching extruders. Set to 0 for no retraction at all. This should generally be the same as the length of the heat zone."
+    "The amount of retraction when switching extruders. Set to 0 for no retraction at all. This should generally be the same as the length of the heat zone.": "The amount of retraction when switching extruders. Set to 0 for no retraction at all. This should generally be the same as the length of the heat zone.",
+    "Build Plate": "Build Plate",
+    "Slow": "Slow",
+    "Fast": "Fast",
+    "Rough": "Rough",
+    "Fine": "Fine",
+    "Thin": "Thin",
+    "Strong": "Strong",
+    "Line Width": "Line Width",
+    "Outer Wall Line Width": "Outer Wall Line Width",
+    "Inner Wall(s) Line Width": "Inner Wall(s) Line Width",
+    "Cooling": "Cooling",
+    "Enable Print Cooling": "Enable Print Cooling",
+    "Regular Fan Speed": "Regular Fan Speed",
+    "Maximum Fan Speed": "Maximum Fan Speed",
+    "Regular Fan Speed at Height": "Regular Fan Speed at Height",
+    "Regular Fan Speed at Layer": "Regular Fan Speed at Layer"
 }

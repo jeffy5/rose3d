@@ -625,7 +625,7 @@ class Configurations extends PureComponent {
                                                             }}
                                                             key={option.label}
                                                         >
-                                                            {option.label}
+                                                            {i18n._(option.label)}
                                                         </button>
                                                     );
                                                 })}

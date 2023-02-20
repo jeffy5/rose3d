@@ -246,7 +246,7 @@ class DefinitionManager {
             'M104 S150 ; set temporary nozzle temp to prevent oozing during homing',
             'G4 S10 ; allow partial nozzle warmup',
             'G28 ; home all axis',
-            'G1 Z50 F240',
+            // 'G1 Z50 F240',
             'G1 X2 Y10 F3000',
             `M104 S${printTempLayer0} ; set final nozzle temp`,
             `M190 S${bedTempLayer0} ; wait for bed temp to stabilize`,

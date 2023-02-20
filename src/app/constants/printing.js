@@ -13,53 +13,53 @@ export const OFFICIAL_CONFIG_MAP = {
             pla: {
                 normal_quality: [
                     { label: 'Rough', value: 0.12 },
-                    { label: 'Media', value: 0.16 },
+                    { label: 'Normal', value: 0.16 },
                     { label: 'Fine', value: 0.2 }
                 ],
                 fast_print: [
                     { label: 'Rough', value: 0.16 },
-                    { label: 'Media', value: 0.2 },
+                    { label: 'Normal', value: 0.2 },
                     { label: 'Fine', value: 0.25 }
                 ],
                 high_quality: [
                     { label: 'Rough', value: 0.06 },
-                    { label: 'Media', value: 0.08 },
+                    { label: 'Normal', value: 0.08 },
                     { label: 'Fine', value: 0.12 }
                 ],
                 race_quality: [
                     { label: 'Rough', value: 0.16 },
-                    { label: 'Media', value: 0.2 },
+                    { label: 'Normal', value: 0.2 },
                     { label: 'Fine', value: 0.25 }
                 ]
             },
             tpu: {
                 normal_quality: [
                     { label: 'Rough', value: 0.12 },
-                    { label: 'Media', value: 0.16 },
+                    { label: 'Normal', value: 0.16 },
                     { label: 'Fine', value: 0.2 }
                 ],
                 fast_print: [
                     { label: 'Rough', value: 0.16 },
-                    { label: 'Media', value: 0.2 },
+                    { label: 'Normal', value: 0.2 },
                     { label: 'Fine', value: 0.25 }
                 ]
             },
             petg: {
                 normal_quality: [
                     { label: 'Rough', value: 0.12 },
-                    { label: 'Media', value: 0.16 },
+                    { label: 'Normal', value: 0.16 },
                     { label: 'Fine', value: 0.2 }
                 ],
                 fast_print: [
                     { label: 'Rough', value: 0.18 },
-                    { label: 'Media', value: 0.2 },
+                    { label: 'Normal', value: 0.2 },
                     { label: 'Fine', value: 0.25 }
                 ]
             },
             abs: {
                 normal_quality: [
                     { label: 'Rough', value: 0.16 },
-                    { label: 'Media', value: 0.18 },
+                    { label: 'Normal', value: 0.18 },
                     { label: 'Fine', value: 0.2 }
                 ]
             }
@@ -71,53 +71,53 @@ export const OFFICIAL_CONFIG_MAP = {
             pla: {
                 normal_quality: [
                     { label: 'Slow', value: 70 },
-                    { label: 'Medium', value: 80 },
+                    { label: 'Normal', value: 80 },
                     { label: 'Fast', value: 90 }
                 ],
                 fast_print: [
                     { label: 'Slow', value: 75 },
-                    { label: 'Medium', value: 85 },
+                    { label: 'Normal', value: 85 },
                     { label: 'Fast', value: 100 }
                 ],
                 high_quality: [
                     { label: 'Slow', value: 40 },
-                    { label: 'Medium', value: 60 },
+                    { label: 'Normal', value: 60 },
                     { label: 'Fast', value: 70 }
                 ],
                 race_quality: [
                     { label: 'Slow', value: 70 },
-                    { label: 'Medium', value: 80 },
+                    { label: 'Normal', value: 80 },
                     { label: 'Fast', value: 90 }
                 ]
             },
             tpu: {
                 normal_quality: [
                     { label: 'Slow', value: 35 },
-                    { label: 'Medium', value: 45 },
+                    { label: 'Normal', value: 45 },
                     { label: 'Fast', value: 55 }
                 ],
                 fast_print: [
                     { label: 'Slow', value: 45 },
-                    { label: 'Medium', value: 55 },
+                    { label: 'Normal', value: 55 },
                     { label: 'Fast', value: 60 }
                 ]
             },
             petg: {
                 normal_quality: [
                     { label: 'Slow', value: 40 },
-                    { label: 'Medium', value: 50 },
+                    { label: 'Normal', value: 50 },
                     { label: 'Fast', value: 60 }
                 ],
                 fast_print: [
                     { label: 'Slow', value: 70 },
-                    { label: 'Medium', value: 80 },
+                    { label: 'Normal', value: 80 },
                     { label: 'Fast', value: 90 }
                 ]
             },
             abs: {
                 normal_quality: [
                     { label: 'Slow', value: 35 },
-                    { label: 'Medium', value: 45 },
+                    { label: 'Normal', value: 45 },
                     { label: 'Fast', value: 55 }
                 ]
             }
@@ -129,53 +129,53 @@ export const OFFICIAL_CONFIG_MAP = {
             pla: {
                 normal_quality: [
                     { label: 'Thin', value: 5 },
-                    { label: 'Medium', value: 10 },
+                    { label: 'Normal', value: 10 },
                     { label: 'Strong', value: 15 }
                 ],
                 fast_print: [
                     { label: 'Thin', value: 2 },
-                    { label: 'Medium', value: 5 },
+                    { label: 'Normal', value: 5 },
                     { label: 'Strong', value: 10 }
                 ],
                 high_quality: [
                     { label: 'Thin', value: 2 },
-                    { label: 'Medium', value: 5 },
+                    { label: 'Normal', value: 5 },
                     { label: 'Strong', value: 10 }
                 ],
                 race_quality: [
                     { label: 'Thin', value: 10 },
-                    { label: 'Medium', value: 20 },
+                    { label: 'Normal', value: 20 },
                     { label: 'Strong', value: 30 }
                 ]
             },
             tpu: {
                 normal_quality: [
                     { label: 'Thin', value: 2 },
-                    { label: 'Medium', value: 5 },
+                    { label: 'Normal', value: 5 },
                     { label: 'Strong', value: 10 }
                 ],
                 fast_print: [
                     { label: 'Thin', value: 5 },
-                    { label: 'Medium', value: 10 },
+                    { label: 'Normal', value: 10 },
                     { label: 'Strong', value: 15 }
                 ]
             },
             petg: {
                 normal_quality: [
                     { label: 'Thin', value: 5 },
-                    { label: 'Medium', value: 10 },
+                    { label: 'Normal', value: 10 },
                     { label: 'Strong', value: 15 }
                 ],
                 fast_print: [
                     { label: 'Thin', value: 5 },
-                    { label: 'Medium', value: 10 },
+                    { label: 'Normal', value: 10 },
                     { label: 'Strong', value: 15 }
                 ]
             },
             abs: {
                 normal_quality: [
                     { label: 'Thin', value: 5 },
-                    { label: 'Medium', value: 10 },
+                    { label: 'Normal', value: 10 },
                     { label: 'Strong', value: 15 }
                 ]
             }
