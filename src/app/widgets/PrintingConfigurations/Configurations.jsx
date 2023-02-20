@@ -503,9 +503,12 @@ class Configurations extends PureComponent {
                 return false;
             }
         });
+        // Put normal quality to first index.
         const normalIndex = officialQualityDefinitions.findIndex(d => d.definitionId.startsWith('quality.normal_quality'));
-        const normalDefinition = officialQualityDefinitions.splice(normalIndex, 1)[0];
-        officialQualityDefinitions.unshift(normalDefinition);
+        if (normalIndex !== -1) {
+            const normalDefinition = officialQualityDefinitions.splice(normalIndex, 1)[0];
+            officialQualityDefinitions.unshift(normalDefinition);
+        }
         const officialQualityDefinitionWidgets = officialQualityDefinitions.map(d => {
             return (
                 <button

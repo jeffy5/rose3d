@@ -148,8 +148,13 @@ class DefinitionManager {
 
         definition.ownKeys.push('machine_start_gcode');
         definition.ownKeys.push('machine_end_gcode');
-        this.addMachineStartGcode(definition);
-        this.addMachineEndGcode(definition);
+        if (series === 'RoseX') {
+            this.addMachineStartGcodeForRosePro(definition);
+            this.addMachineEndGcodeForRosePro(definition);
+        } else {
+            this.addMachineStartGcode(definition);
+            this.addMachineEndGcode(definition);
+        }
 
         return definition;
     }
@@ -220,6 +225,51 @@ class DefinitionManager {
             `G1 X${0} F3000 ;move X to min endstops, so the head is out of the way`,
             `G1 Y${y} F3000 ;so the head is out of the way and Plate is moved forward`,
             'M84 ;steppers off',
+            ';End GCode end'
+        ];
+
+        definition.settings.machine_end_gcode = { default_value: gcode.join('\n') };
+    }
+
+    addMachineStartGcodeForRosePro(definition) {
+        const settings = definition.settings;
+
+        const printTemp = settings.material_print_temperature.default_value;
+        const printTempLayer0 = settings.material_print_temperature_layer_0.default_value || printTemp;
+        const bedTempLayer0 = settings.material_bed_temperature_layer_0.default_value;
+
+        const gcode = [
+            ';Start GCode begin',
+            'G90 ; use absolute coordinates',
+            'M83 ; extruder relative mode',
+            `M140 S${bedTempLayer0} ; set final bed temp`,
+            'M104 S150 ; set temporary nozzle temp to prevent oozing during homing',
+            'G4 S10 ; allow partial nozzle warmup',
+            'G28 ; home all axis',
+            'G1 Z50 F240',
+            'G1 X2 Y10 F3000',
+            `M104 S${printTempLayer0} ; set final nozzle temp`,
+            `M190 S${bedTempLayer0} ; wait for bed temp to stabilize`,
+            `M109 S${printTempLayer0} ; wait for nozzle temp to stabilize`,
+            'G1 Z0.28 F240',
+            'G92 E0',
+            'G1 Y140 E10 F1500 ; prime the nozzle',
+            'G1 X2.3 F5000',
+            'G92 E0',
+            'G1 Y10 E10 F1200 ; prime the nozzle',
+            'G92 E0',
+            ';Start GCode end'
+        ];
+        definition.settings.machine_start_gcode = { default_value: gcode.join('\n') };
+    }
+
+    addMachineEndGcodeForRosePro(definition) {
+        const gcode = [
+            ';End GCode begin',
+            'M140 S0 ; turn off heatbed',
+            'M104 S0 ; turn off temperature',
+            'G28   ; home XYZ axis',
+            'M84     ; disable motors',
             ';End GCode end'
         ];
 
