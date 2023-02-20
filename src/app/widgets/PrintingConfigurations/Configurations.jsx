@@ -12,491 +12,31 @@ import i18n from '../../lib/i18n';
 import confirm from '../../lib/confirm';
 import widgetStyles from '../styles.styl';
 import { actions as printingActions } from '../../flux/printing';
+import {
+    OFFICIAL_CONFIG_KEYS,
+    OFFICIAL_CONFIG_MAP,
+    MATERIAL_DEFAULT_DEFINITION_MAP
+} from '../../constants/printing';
 import styles from './styles.styl';
 
-
-const OFFICIAL_CONFIG_KEYS = [
-    'layer_height',
-    'speed_wall_x',
-    'infill_sparse_density',
-    'support_type',
-    'adhesion_type'
-];
-
-const officialConfigMap = {
-    layer_height: {
-        showValue: true,
-        options: {
-            pla: {
-                normal_quality: [
-                    { label: 'Rough', value: 0.12 },
-                    { label: 'Media', value: 0.16 },
-                    { label: 'Fine', value: 0.2 }
-                ],
-                fast_print: [
-                    { label: 'Rough', value: 0.16 },
-                    { label: 'Media', value: 0.2 },
-                    { label: 'Fine', value: 0.25 }
-                ],
-                high_quality: [
-                    { label: 'Rough', value: 0.06 },
-                    { label: 'Media', value: 0.08 },
-                    { label: 'Fine', value: 0.12 }
-                ],
-                race_quality: [
-                    { label: 'Rough', value: 0.16 },
-                    { label: 'Media', value: 0.2 },
-                    { label: 'Fine', value: 0.25 }
-                ]
-            },
-            tpu: {
-                normal_quality: [
-                    { label: 'Rough', value: 0.12 },
-                    { label: 'Media', value: 0.16 },
-                    { label: 'Fine', value: 0.2 }
-                ],
-                fast_print: [
-                    { label: 'Rough', value: 0.16 },
-                    { label: 'Media', value: 0.2 },
-                    { label: 'Fine', value: 0.25 }
-                ]
-            },
-            petg: {
-                normal_quality: [
-                    { label: 'Rough', value: 0.12 },
-                    { label: 'Media', value: 0.16 },
-                    { label: 'Fine', value: 0.2 }
-                ],
-                fast_print: [
-                    { label: 'Rough', value: 0.18 },
-                    { label: 'Media', value: 0.2 },
-                    { label: 'Fine', value: 0.25 }
-                ]
-            },
-            abs: {
-                normal_quality: [
-                    { label: 'Rough', value: 0.16 },
-                    { label: 'Media', value: 0.18 },
-                    { label: 'Fine', value: 0.2 }
-                ]
-            }
-        }
-    },
-    speed_wall_x: {
-        showValue: true,
-        options: {
-            pla: {
-                normal_quality: [
-                    { label: 'Slow', value: 70 },
-                    { label: 'Medium', value: 80 },
-                    { label: 'Fast', value: 90 }
-                ],
-                fast_print: [
-                    { label: 'Slow', value: 75 },
-                    { label: 'Medium', value: 85 },
-                    { label: 'Fast', value: 100 }
-                ],
-                high_quality: [
-                    { label: 'Slow', value: 40 },
-                    { label: 'Medium', value: 60 },
-                    { label: 'Fast', value: 70 }
-                ],
-                race_quality: [
-                    { label: 'Slow', value: 70 },
-                    { label: 'Medium', value: 80 },
-                    { label: 'Fast', value: 90 }
-                ]
-            },
-            tpu: {
-                normal_quality: [
-                    { label: 'Slow', value: 35 },
-                    { label: 'Medium', value: 45 },
-                    { label: 'Fast', value: 55 }
-                ],
-                fast_print: [
-                    { label: 'Slow', value: 45 },
-                    { label: 'Medium', value: 55 },
-                    { label: 'Fast', value: 60 }
-                ]
-            },
-            petg: {
-                normal_quality: [
-                    { label: 'Slow', value: 40 },
-                    { label: 'Medium', value: 50 },
-                    { label: 'Fast', value: 60 }
-                ],
-                fast_print: [
-                    { label: 'Slow', value: 70 },
-                    { label: 'Medium', value: 80 },
-                    { label: 'Fast', value: 90 }
-                ]
-            },
-            abs: {
-                normal_quality: [
-                    { label: 'Slow', value: 35 },
-                    { label: 'Medium', value: 45 },
-                    { label: 'Fast', value: 55 }
-                ]
-            }
-        }
-    },
-    infill_sparse_density: {
-        showValue: true,
-        options: {
-            pla: {
-                normal_quality: [
-                    { label: 'Thin', value: 5 },
-                    { label: 'Medium', value: 10 },
-                    { label: 'Strong', value: 15 }
-                ],
-                fast_print: [
-                    { label: 'Thin', value: 2 },
-                    { label: 'Medium', value: 5 },
-                    { label: 'Strong', value: 10 }
-                ],
-                high_quality: [
-                    { label: 'Thin', value: 2 },
-                    { label: 'Medium', value: 5 },
-                    { label: 'Strong', value: 10 }
-                ],
-                race_quality: [
-                    { label: 'Thin', value: 10 },
-                    { label: 'Medium', value: 20 },
-                    { label: 'Strong', value: 30 }
-                ]
-            },
-            tpu: {
-                normal_quality: [
-                    { label: 'Thin', value: 2 },
-                    { label: 'Medium', value: 5 },
-                    { label: 'Strong', value: 10 }
-                ],
-                fast_print: [
-                    { label: 'Thin', value: 5 },
-                    { label: 'Medium', value: 10 },
-                    { label: 'Strong', value: 15 }
-                ]
-            },
-            petg: {
-                normal_quality: [
-                    { label: 'Thin', value: 5 },
-                    { label: 'Medium', value: 10 },
-                    { label: 'Strong', value: 15 }
-                ],
-                fast_print: [
-                    { label: 'Thin', value: 5 },
-                    { label: 'Medium', value: 10 },
-                    { label: 'Strong', value: 15 }
-                ]
-            },
-            abs: {
-                normal_quality: [
-                    { label: 'Thin', value: 5 },
-                    { label: 'Medium', value: 10 },
-                    { label: 'Strong', value: 15 }
-                ]
-            }
-        }
-    },
-    support_type: {
-        showValue: false,
-        options: {
-            pla: {
-                normal_quality: [
-                    {
-                        label: 'Build Plate',
-                        value: 'buildplate',
-                        deps: [
-                            { key: 'support_enable', value: true }
-                        ]
-                    },
-                    {
-                        label: 'Everywhere',
-                        value: 'everywhere',
-                        deps: [
-                            { key: 'support_enable', value: true }
-                        ]
-                    },
-                    {
-                        label: 'None',
-                        deps: [
-                            { key: 'support_enable', value: false }
-                        ]
-                    }
-                ],
-                fast_print: [
-                    {
-                        label: 'Build Plate',
-                        value: 'buildplate',
-                        deps: [
-                            { key: 'support_enable', value: true }
-                        ]
-                    },
-                    {
-                        label: 'Everywhere',
-                        value: 'everywhere',
-                        deps: [
-                            { key: 'support_enable', value: true }
-                        ]
-                    },
-                    {
-                        label: 'None',
-                        deps: [
-                            { key: 'support_enable', value: false }
-                        ]
-                    }
-                ],
-                high_quality: [
-                    {
-                        label: 'Build Plate',
-                        value: 'buildplate',
-                        deps: [
-                            { key: 'support_enable', value: true }
-                        ]
-                    },
-                    {
-                        label: 'Everywhere',
-                        value: 'everywhere',
-                        deps: [
-                            { key: 'support_enable', value: true }
-                        ]
-                    },
-                    {
-                        label: 'None',
-                        deps: [
-                            { key: 'support_enable', value: false }
-                        ]
-                    }
-                ],
-                race_quality: [
-                    {
-                        label: 'Build Plate',
-                        value: 'buildplate',
-                        deps: [
-                            { key: 'support_enable', value: true }
-                        ]
-                    },
-                    {
-                        label: 'Everywhere',
-                        value: 'everywhere',
-                        deps: [
-                            { key: 'support_enable', value: true }
-                        ]
-                    },
-                    {
-                        label: 'None',
-                        deps: [
-                            { key: 'support_enable', value: false }
-                        ]
-                    }
-                ]
-            },
-            tpu: {
-                normal_quality: [
-                    {
-                        label: 'Build Plate',
-                        value: 'buildplate',
-                        deps: [
-                            { key: 'support_enable', value: true }
-                        ]
-                    },
-                    {
-                        label: 'Everywhere',
-                        value: 'everywhere',
-                        deps: [
-                            { key: 'support_enable', value: true }
-                        ]
-                    },
-                    {
-                        label: 'None',
-                        deps: [
-                            { key: 'support_enable', value: false }
-                        ]
-                    }
-                ],
-                fast_print: [
-                    {
-                        label: 'Build Plate',
-                        value: 'buildplate',
-                        deps: [
-                            { key: 'support_enable', value: true }
-                        ]
-                    },
-                    {
-                        label: 'Everywhere',
-                        value: 'everywhere',
-                        deps: [
-                            { key: 'support_enable', value: true }
-                        ]
-                    },
-                    {
-                        label: 'None',
-                        deps: [
-                            { key: 'support_enable', value: false }
-                        ]
-                    }
-                ]
-            },
-            petg: {
-                normal_quality: [
-                    {
-                        label: 'Build Plate',
-                        value: 'buildplate',
-                        deps: [
-                            { key: 'support_enable', value: true }
-                        ]
-                    },
-                    {
-                        label: 'Everywhere',
-                        value: 'everywhere',
-                        deps: [
-                            { key: 'support_enable', value: true }
-                        ]
-                    },
-                    {
-                        label: 'None',
-                        deps: [
-                            { key: 'support_enable', value: false }
-                        ]
-                    }
-                ],
-                fast_print: [
-                    {
-                        label: 'Build Plate',
-                        value: 'buildplate',
-                        deps: [
-                            { key: 'support_enable', value: true }
-                        ]
-                    },
-                    {
-                        label: 'Everywhere',
-                        value: 'everywhere',
-                        deps: [
-                            { key: 'support_enable', value: true }
-                        ]
-                    },
-                    {
-                        label: 'None',
-                        deps: [
-                            { key: 'support_enable', value: false }
-                        ]
-                    }
-                ]
-            },
-            abs: {
-                normal_quality: [
-                    {
-                        label: 'Build Plate',
-                        value: 'buildplate',
-                        deps: [
-                            { key: 'support_enable', value: true }
-                        ]
-                    },
-                    {
-                        label: 'Everywhere',
-                        value: 'everywhere',
-                        deps: [
-                            { key: 'support_enable', value: true }
-                        ]
-                    },
-                    {
-                        label: 'None',
-                        deps: [
-                            { key: 'support_enable', value: false }
-                        ]
-                    }
-                ]
-            }
-        },
-        checkSelected: (optionValue, settingValue, settings) => {
-            if (!optionValue) {
-                // None 是否没支撑
-                return !settings.support_enable.default_value;
-            }
-            return settings.support_enable.default_value && optionValue === settingValue;
-        }
-    },
-    adhesion_type: {
-        showValue: false,
-        options: {
-            pla: {
-                normal_quality: [
-                    { label: 'Skirt', value: 'skirt' },
-                    { label: 'Brim', value: 'brim' },
-                    { label: 'None', value: 'none' }
-                ],
-                fast_print: [
-                    { label: 'Skirt', value: 'skirt' },
-                    { label: 'Brim', value: 'brim' },
-                    { label: 'None', value: 'none' }
-                ],
-                high_quality: [
-                    { label: 'Skirt', value: 'skirt' },
-                    { label: 'Brim', value: 'brim' },
-                    { label: 'None', value: 'none' }
-                ],
-                race_quality: [
-                    { label: 'Skirt', value: 'skirt' },
-                    { label: 'Brim', value: 'brim' },
-                    { label: 'None', value: 'none' }
-                ]
-            },
-            tpu: {
-                normal_quality: [
-                    { label: 'Skirt', value: 'skirt' },
-                    { label: 'Brim', value: 'brim' },
-                    { label: 'None', value: 'none' }
-                ],
-                fast_print: [
-                    { label: 'Skirt', value: 'skirt' },
-                    { label: 'Brim', value: 'brim' },
-                    { label: 'None', value: 'none' }
-                ]
-            },
-            petg: {
-                normal_quality: [
-                    { label: 'Skirt', value: 'skirt' },
-                    { label: 'Brim', value: 'brim' },
-                    { label: 'None', value: 'none' }
-                ],
-                fast_print: [
-                    { label: 'Skirt', value: 'skirt' },
-                    { label: 'Brim', value: 'brim' },
-                    { label: 'None', value: 'none' }
-                ]
-            },
-            abs: {
-                normal_quality: [
-                    { label: 'Skirt', value: 'skirt' },
-                    { label: 'Brim', value: 'brim' },
-                    { label: 'None', value: 'none' }
-                ]
-            }
-        }
-    }
-};
 
 const isOfficialMaterial = (materialType) => {
     return includes(['pla', 'tpu', 'petg', 'abs'], materialType);
 };
 
-const isSupportOfficalDefinition = (materialType, printDefinition) => {
-    if (materialType === 'pla') {
-        return true;
-    } else if (materialType === 'tpu') {
-        return includes([
-            'quality.fast_print', 'quality.normal_quality'
-        ], printDefinition.definitionId);
-    } else if (materialType === 'petg') {
-        return includes([
-            'quality.fast_print', 'quality.normal_quality'
-        ], printDefinition.definitionId);
-    } else if (materialType === 'abs') {
-        return includes([
-            'quality.normal_quality'
-        ], printDefinition.definitionId);
+const getOfficialDefinitionLabel = (definition) => {
+    const definitionId = definition.definitionId;
+    if (definitionId.startsWith('quality.fast_print')) {
+        return i18n._('Fast Print');
+    } else if (definitionId.startsWith('quality.normal_quality')) {
+        return i18n._('Normal Quality');
+    } else if (definitionId.startsWith('quality.high_quality')) {
+        return i18n._('High Quality');
+    } else if (definitionId.startsWith('quality.race_quality')) {
+        return i18n._('Race Mode');
+    } else {
+        return definition.name;
     }
-    return false;
 };
 
 function isDefinitionEditable(definition) {
@@ -833,9 +373,25 @@ class Configurations extends PureComponent {
     }
 
     componentDidUpdate() {
+        // Switch to custom configuratino tab if change to non-official material.
         const materialType = this.props.defaultMaterialId.replace('material.', '');
         if (!isOfficialMaterial(materialType) && this.state.isOfficialTab) {
             this.actions.onSetOfficoalTab(false);
+        }
+
+        // Change official definition when material type is changed.
+        const { isOfficialTab, officialQualityDefinition } = this.state;
+        const { qualityDefinitions } = this.props;
+        if (isOfficialMaterial(materialType) && isOfficialTab) {
+            const regex = /quality\.[0-9a-zA-Z]+_[0-9a-zA-Z]+(_[0-9a-zA-Z]+)?/;
+            const qualityDefinitionMaterialSuffix = officialQualityDefinition.definitionId.match(regex)[1] || '_pla';
+            const qualityDefinitionMaterialType = qualityDefinitionMaterialSuffix.replace('_', '');
+
+            if (qualityDefinitionMaterialType !== materialType) {
+                const materialDefaultDefinitionId = MATERIAL_DEFAULT_DEFINITION_MAP[materialType];
+                const materialDefaultDefinition = qualityDefinitions.find(d => d.definitionId === materialDefaultDefinitionId);
+                this.actions.onSelectOfficialDefinition(materialDefaultDefinition);
+            }
         }
     }
 
@@ -909,26 +465,62 @@ class Configurations extends PureComponent {
         const state = this.state;
         const actions = this.actions;
 
-        const fastPrintDefinition = this.props.qualityDefinitions.find(d => d.definitionId === 'quality.fast_print');
-        const normalQualityDefinition = this.props.qualityDefinitions.find(d => d.definitionId === 'quality.normal_quality');
-        const highQualityDefinition = this.props.qualityDefinitions.find(d => d.definitionId === 'quality.high_quality');
-        const raceQualityDefinition = this.props.qualityDefinitions.find(d => d.definitionId === 'quality.race_quality');
+        const materialType = this.props.defaultMaterialId.replace('material.', '');
         // const series = this.props.series;
 
         const { isOfficialTab, officialQualityDefinition, customQualityDefinition, customDefinitionOptions, SupportDefinition, showCustomOptions } = this.state;
         const qualityDefinition = isOfficialTab ? officialQualityDefinition : customQualityDefinition;
         const activeDefinition = this.props.activeDefinition;
 
-        const materialType = this.props.defaultMaterialId.replace('material.', '');
         const qualityDefinitionType = qualityDefinition !== null
-            ? qualityDefinition.definitionId.replace('quality.', '')
+            ? qualityDefinition.definitionId.replace('quality.', '').replace(/_abs|_tpu|_petg/g, '')
             : '';
-
+        console.log('qualityDefinitionType', qualityDefinitionType);
         if (!qualityDefinition) {
             return null;
         }
 
         const editable = isDefinitionEditable(qualityDefinition);
+
+        const officialQualityDefinitions = this.props.qualityDefinitions.filter(d => {
+            if (materialType === 'pla') {
+                return includes([
+                    'quality.fast_print', 'quality.normal_quality', 'quality.high_quality', 'quality.race_quality'
+                ], d.definitionId);
+            } else if (materialType === 'tpu') {
+                return includes([
+                    'quality.fast_print_tpu', 'quality.normal_quality_tpu'
+                ], d.definitionId);
+            } else if (materialType === 'petg') {
+                return includes([
+                    'quality.fast_print_petg', 'quality.normal_quality_petg'
+                ], d.definitionId);
+            } else if (materialType === 'abs') {
+                return includes([
+                    'quality.normal_quality_abs'
+                ], d.definitionId);
+            } else {
+                return false;
+            }
+        });
+        const normalIndex = officialQualityDefinitions.findIndex(d => d.definitionId.startsWith('quality.normal_quality'));
+        const normalDefinition = officialQualityDefinitions.splice(normalIndex, 1)[0];
+        officialQualityDefinitions.unshift(normalDefinition);
+        const officialQualityDefinitionWidgets = officialQualityDefinitions.map(d => {
+            return (
+                <button
+                    key={d.definitionId}
+                    type="button"
+                    style={{ width: '25%' }}
+                    className={classNames(styles['options-btn'], { [styles.selected]: qualityDefinition === d })}
+                    onClick={() => {
+                        this.actions.onSelectOfficialDefinition(d);
+                    }}
+                >
+                    {getOfficialDefinitionLabel(d)}
+                </button>
+            );
+        });
 
         return (
             <div className={styles['configuration-options-container']}>
@@ -936,54 +528,7 @@ class Configurations extends PureComponent {
                     <div className={styles['configuration-options']} style={{ fontSize: '10px' }}>
                         <div className={styles['preset-options']}>
                             <div className={styles['options-btn-list']}>
-                                {isSupportOfficalDefinition(materialType, normalQualityDefinition) && (
-                                    <button
-                                        type="button"
-                                        style={{ width: '25%' }}
-                                        className={classNames(styles['options-btn'], { [styles.selected]: qualityDefinition === normalQualityDefinition })}
-                                        onClick={() => {
-                                            this.actions.onSelectOfficialDefinition(normalQualityDefinition);
-                                        }}
-                                    >
-                                        {i18n._('Normal Quality')}
-                                    </button>
-                                )}
-                                {isSupportOfficalDefinition(materialType, fastPrintDefinition) && (
-                                    <button
-                                        type="button"
-                                        style={{ width: '25%' }}
-                                        className={classNames(styles['options-btn'], { [styles.selected]: qualityDefinition === fastPrintDefinition })}
-                                        onClick={() => {
-                                            this.actions.onSelectOfficialDefinition(fastPrintDefinition);
-                                        }}
-                                    >
-                                        {i18n._('Fast Print')}
-                                    </button>
-                                )}
-                                {isSupportOfficalDefinition(materialType, highQualityDefinition) && (
-                                    <button
-                                        type="button"
-                                        style={{ width: '25%' }}
-                                        className={classNames(styles['options-btn'], { [styles.selected]: qualityDefinition === highQualityDefinition })}
-                                        onClick={() => {
-                                            this.actions.onSelectOfficialDefinition(highQualityDefinition);
-                                        }}
-                                    >
-                                        {i18n._('High Quality')}
-                                    </button>
-                                )}
-                                {isSupportOfficalDefinition(materialType, raceQualityDefinition) && (
-                                    <button
-                                        type="button"
-                                        style={{ width: '25%' }}
-                                        className={classNames(styles['options-btn'], { [styles.selected]: qualityDefinition === raceQualityDefinition })}
-                                        onClick={() => {
-                                            this.actions.onSelectOfficialDefinition(raceQualityDefinition);
-                                        }}
-                                    >
-                                        {i18n._('Race Mode')}
-                                    </button>
-                                )}
+                                {officialQualityDefinitionWidgets}
                             </div>
                             <div style={{ display: 'none' }}>
                                 <Anchor
@@ -1044,7 +589,7 @@ class Configurations extends PureComponent {
                                 const setting = settings[key];
                                 const { label, unit, default_value: defaultValue } = setting;
 
-                                const officialConfig = officialConfigMap[key];
+                                const officialConfig = OFFICIAL_CONFIG_MAP[key];
                                 const options = officialConfig.options[materialType]
                                     ? officialConfig.options[materialType][qualityDefinitionType] || []
                                     : [];

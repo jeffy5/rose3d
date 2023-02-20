@@ -158,7 +158,7 @@ export function loadDefinitionLoaderByFilename(filename, configPath) {
     return definitionLoader;
 }
 
-export function loadMaterialDefinitions() {
+export function loadMaterialDefinitions(configPath) {
     const predefined = [
         'material.pla.def.json',
         'material.tpu.def.json',
@@ -167,25 +167,25 @@ export function loadMaterialDefinitions() {
     ];
 
     const regex = /^material.([A-Za-z0-9_]+).def.json$/;
-    const defaultDefinitionLoader = loadDefinitionLoaderByFilename('material.pla.def.json');
+    const defaultDefinitionLoader = loadDefinitionLoaderByFilename('material.pla.def.json', configPath);
     // predefined.push('material.tpu.def.json');
 
 
-    const configDir = DataStorage.configDir;
+    const configDir = `${DataStorage.configDir}/${configPath}`;
     const filenames = fs.readdirSync(configDir);
 
     // Load pre-defined definitions first
     const definitions = [];
     for (const filename of predefined) {
         if (includes(filenames, filename)) {
-            const definitionLoader = loadDefinitionLoaderByFilename(filename);
+            const definitionLoader = loadDefinitionLoaderByFilename(filename, configPath);
             definitions.push(definitionLoader.toObject());
         }
     }
 
     for (const filename of filenames) {
         if (!includes(predefined, filename) && regex.test(filename)) {
-            const definitionLoader = loadDefinitionLoaderByFilename(filename);
+            const definitionLoader = loadDefinitionLoaderByFilename(filename, configPath);
             if (defaultDefinitionLoader) {
                 const ownKeys = Array.from(defaultDefinitionLoader.ownKeys).filter(e => !definitionLoader.ownKeys.has(e));
                 if (ownKeys && ownKeys.length > 0) {

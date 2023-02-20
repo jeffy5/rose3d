@@ -247,7 +247,7 @@ printingConfigs.delete = defaultAPIFactory((options) => request.delete('/api/pri
 printingConfigs.getDefinition = defaultAPIFactory((definitionId, series) => request.get(`/api/printingDefinition/${definitionId}`).send({ series }));
 
 printingConfigs.getQualityDefinitions = defaultAPIFactory((series) => request.get(`/api/printingQualityDefinitions/${series}`));
-printingConfigs.getMaterialDefinitions = defaultAPIFactory(() => request.get('/api/printingMaterialDefinitions'));
+printingConfigs.getMaterialDefinitions = defaultAPIFactory((series) => request.get(`/api/printingMaterialDefinitions/${series}`));
 
 printingConfigs.createDefinition = defaultAPIFactory((definition, series) => request.post('/api/printingDefinition').send({
     definition,

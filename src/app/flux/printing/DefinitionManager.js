@@ -28,7 +28,7 @@ class DefinitionManager {
         res = await api.printingConfigs.getDefinition('active');
         this.activeDefinition = res.body.definition;
 
-        res = await api.printingConfigs.getMaterialDefinitions();
+        res = await api.printingConfigs.getMaterialDefinitions(series);
         this.materialDefinitions = res.body.definitions;
 
         res = await api.printingConfigs.getQualityDefinitions(series);

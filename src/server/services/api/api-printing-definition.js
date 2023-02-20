@@ -4,6 +4,9 @@ import { ERR_BAD_REQUEST, ERR_INTERNAL_SERVER_ERROR } from '../../constants';
 import { loadQualityDefinitions, loadMaterialDefinitions, DefinitionLoader } from '../../slicer';
 import DataStorage from '../../DataStorage';
 
+const isMaterialDefinition = (definitionId) => {
+    return definitionId.indexOf('material') !== -1;
+};
 const isQualityDefinition = (definitionId) => {
     return definitionId.indexOf('quality') !== -1;
 };
@@ -25,7 +28,8 @@ export const getDefinition = (req, res) => {
 };
 
 export const getMaterialDefinitions = (req, res) => {
-    const definitions = loadMaterialDefinitions();
+    const { series } = req.params;
+    const definitions = loadMaterialDefinitions(series);
     res.send({ definitions });
 };
 
@@ -37,7 +41,8 @@ export const getQualityDefinitions = (req, res) => {
 
 export const createDefinition = (req, res) => {
     const { definition } = req.body;
-    const series = isQualityDefinition(definition.definitionId) ? req.body.series : '';
+    const series = isMaterialDefinition(definition.definitionId) || isQualityDefinition(definition.definitionId)
+        ? req.body.series : '';
 
     const definitionLoader = new DefinitionLoader();
     definitionLoader.fromObject(definition);
@@ -57,7 +62,8 @@ export const createDefinition = (req, res) => {
 
 export const removeDefinition = (req, res) => {
     const { definitionId } = req.params;
-    const series = isQualityDefinition(definitionId) ? req.body.series : '';
+    const series = isMaterialDefinition(definitionId) || isQualityDefinition(definitionId)
+        ? req.body.series : '';
 
     const filePath = path.join(`${DataStorage.configDir}/${series}`, `${definitionId}.def.json`);
     fs.unlink(filePath, (err) => {
@@ -71,7 +77,8 @@ export const removeDefinition = (req, res) => {
 
 export const updateDefinition = (req, res) => {
     const { definitionId } = req.params;
-    const series = isQualityDefinition(definitionId) ? req.body.series : '';
+    const series = isMaterialDefinition(definitionId) || isQualityDefinition(definitionId)
+        ? req.body.series : '';
 
     const definitionLoader = new DefinitionLoader();
     definitionLoader.loadDefinition(definitionId, series);
