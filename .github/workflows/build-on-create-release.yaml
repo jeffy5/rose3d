@@ -5,6 +5,10 @@ on:
         types:
             - created
 
+env:
+    RELEASE_NAME: ${{ github.event.release.name }}
+    RELEASE_BODY: ${{ github.event.release.body }}
+
 jobs:
     build-windows:
         name: Build Windows Packages
@@ -367,3 +371,67 @@ jobs:
             #       ossutil cp -f ./output/*.deb* ${{secrets.OSS_UPDATE_PATH}}/${{ env.DEB_ASSET_NAME }}
             #       ossutil cp -f ./output/*.rpm* ${{secrets.OSS_UPDATE_PATH}}/${{ env.RPM_ASSET_NAME }}
             #       ossutil cp -f ./output/*.tar* ${{secrets.OSS_UPDATE_PATH}}/${{ env.TAR_ASSET_NAME }}
+            #
+
+    notice-in-feishu:
+        name: notice in feishu
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v3
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Use Node.js 16
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 16
+
+            - name: Send POST request
+              env:
+                  FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+              run: |
+                  export PACKAGE_VERSION=`node -e "console.log(require('./src/package.json').version)"`
+
+                  export WINDOW_PACKAGE_NAME="Rose3D-${PACKAGE_VERSION}-win-x64.exe"
+                  export WINDOW_PACKAGE_URL="https://github.com/jeffy5/Luban/releases/download/${RELEASE_NAME}/${WINDOW_PACKAGE_NAME}"
+                  export LINUX_PACKAGE_NAME="Rose3D-${PACKAGE_VERSION}-linux-x64.tar.gz"
+                  export LINUX_PACKAGE_URL="https://github.com/jeffy5/Luban/releases/download/${RELEASE_NAME}/${LINUX_PACKAGE_NAME}"
+                  export RELEASE_BODY_ESCAPE="${RELEASE_BODY//[$'\n\r']/ }"
+                  export MESSAGE_BODY='{
+                      "msg_type":"post",
+                      "content":{
+                          "post":{
+                              "zh_cn":{
+                                  "title":"${RELEASE_NAME}",
+                                  "content":[
+                                      [
+                                          {
+                                              "tag":"text",
+                                              "text":"${RELEASE_BODY_ESCAPE}"
+                                          }
+                                      ],
+                                      [
+                                          {
+                                              "tag":"a",
+                                              "text":"${WINDOW_PACKAGE_NAME}",
+                                              "href":"${WINDOW_PACKAGE_URL}"
+                                          }
+                                      ],
+                                      [
+                                          {
+                                              "tag":"a",
+                                              "text":"${LINUX_PACKAGE_NAME}",
+                                              "href":"${LINUX_PACKAGE_URL}"
+                                          }
+                                      ]
+                                  ]
+                              }
+                          }
+                      }
+                  }'
+                  echo $MESSAGE_BODY
+                  export MESSAGE_BODY=$(echo $MESSAGE_BODY | envsubst)
+                  echo $MESSAGE_BODY
+
+                  curl -X POST -H "Content-Type: application/json" -d "$MESSAGE_BODY" $FEISHU_WEBHOOK

@@ -85,12 +85,24 @@ class VisualizerModelTransformation extends PureComponent {
                     break;
                 case 'scaleX':
                     transformation.scaleX = value;
+                    if (this.state.isScaleSync) {
+                        transformation.scaleY = value;
+                        transformation.scaleZ = value;
+                    }
                     break;
                 case 'scaleY':
                     transformation.scaleY = value;
+                    if (this.state.isScaleSync) {
+                        transformation.scaleX = value;
+                        transformation.scaleZ = value;
+                    }
                     break;
                 case 'scaleZ':
                     transformation.scaleZ = value;
+                    if (this.state.isScaleSync) {
+                        transformation.scaleX = value;
+                        transformation.scaleY = value;
+                    }
                     break;
                 case 'rotateX':
                     transformation.rotationX = value;
@@ -120,11 +132,15 @@ class VisualizerModelTransformation extends PureComponent {
         },
         setModelstick: (isStick) => {
             this.props.setModelstick(isStick);
+        },
+        setScaleSync: (isScaleSync) => {
+            this.setState({ isScaleSync });
         }
     };
 
     state = {
         isStick: false,
+        isScaleSync: true,
         extruder: '0'
     }
 
@@ -369,6 +385,21 @@ class VisualizerModelTransformation extends PureComponent {
                                 />
                             </span>
                             <span className={styles['axis-unit-2']}>%</span>
+                        </div>
+                        <div className={styles.axis}>
+                            <FormControlLabel
+                                control={(
+                                    <Switch
+                                        disabled={disabled}
+                                        checked={this.state.isScaleSync}
+                                        onChange={() => {
+                                            this.actions.setScaleSync(!this.state.isScaleSync);
+                                        }}
+                                        name="isScaleSync"
+                                    />
+                                )}
+                                label="Sync"
+                            />
                         </div>
                     </div>
                 )}
