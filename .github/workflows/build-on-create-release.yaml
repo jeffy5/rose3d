@@ -374,6 +374,7 @@ jobs:
             #
 
     notice-in-feishu:
+        needs: [build-windows, build-linux]
         name: notice in feishu
         runs-on: ubuntu-latest
         steps:
