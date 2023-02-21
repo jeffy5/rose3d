@@ -395,9 +395,9 @@ jobs:
                   export PACKAGE_VERSION=`node -e "console.log(require('./src/package.json').version)"`
 
                   export WINDOW_PACKAGE_NAME="Rose3D-${PACKAGE_VERSION}-win-x64.exe"
-                  export WINDOW_PACKAGE_URL="https://github.com/jeffy5/Luban/releases/download/${RELEASE_NAME}/${WINDOW_PACKAGE_NAME}"
+                  export WINDOW_PACKAGE_URL="https://github.com/jeffy5/rose3d/releases/download/${RELEASE_NAME}/${WINDOW_PACKAGE_NAME}"
                   export LINUX_PACKAGE_NAME="Rose3D-${PACKAGE_VERSION}-linux-x64.tar.gz"
-                  export LINUX_PACKAGE_URL="https://github.com/jeffy5/Luban/releases/download/${RELEASE_NAME}/${LINUX_PACKAGE_NAME}"
+                  export LINUX_PACKAGE_URL="https://github.com/jeffy5/rose3d/releases/download/${RELEASE_NAME}/${LINUX_PACKAGE_NAME}"
                   export RELEASE_BODY_ESCAPE="${RELEASE_BODY//[$'\n\r']/ }"
                   export MESSAGE_BODY='{
                       "msg_type":"post",
