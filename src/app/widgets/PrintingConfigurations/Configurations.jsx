@@ -1,22 +1,42 @@
+// React
 import React, { PureComponent } from 'react';
+
+// PropTypes
 import PropTypes from 'prop-types';
+
+// Redux
 import { connect } from 'react-redux';
-import Select from 'react-select';
-import classNames from 'classnames';
+
+// Utils
 import includes from 'lodash/includes';
+import classNames from 'classnames';
+
+// Components
+import Select from 'react-select';
+import { NumberInput as Input } from '../../components/Input';
 import Anchor from '../../components/Anchor';
 import Notifications from '../../components/Notifications';
 import TipTrigger from '../../components/TipTrigger';
-import { NumberInput as Input } from '../../components/Input';
-import i18n from '../../lib/i18n';
-import confirm from '../../lib/confirm';
-import widgetStyles from '../styles.styl';
+import PrintDefinitionWatcher from './PrintDefinitionWatcher';
+
+// Flux
 import { actions as printingActions } from '../../flux/printing';
+
+// I18n
+import i18n from '../../lib/i18n';
+
+// Modal
+import confirm from '../../lib/confirm';
+
+// Constants
 import {
     OFFICIAL_CONFIG_KEYS,
     OFFICIAL_CONFIG_MAP,
     MATERIAL_DEFAULT_DEFINITION_MAP
 } from '../../constants/printing';
+
+// Style
+import widgetStyles from '../styles.styl';
 import styles from './styles.styl';
 
 
@@ -364,6 +384,39 @@ class Configurations extends PureComponent {
             this.setState({
                 showCustomOptions: !this.state.showCustomOptions
             });
+        },
+        onQualityDefinitionChange: (qualityDefinition) => {
+            if (this.state.isOfficialTab) {
+                // Reset all official shortcut's value
+                for (const key of OFFICIAL_CONFIG_KEYS) {
+                    const qualityDefinitionType = qualityDefinition !== null
+                        ? qualityDefinition.definitionId.replace('quality.', '').replace(/_abs|_tpu|_petg/g, '')
+                        : '';
+
+                    const materialType = this.props.defaultMaterialId.replace('material.', '');
+                    const officialConfig = OFFICIAL_CONFIG_MAP[key];
+                    const options = officialConfig.options[materialType]
+                        ? officialConfig.options[materialType][qualityDefinitionType] || []
+                        : [];
+
+                    let defaultOption;
+                    if (key === 'support_type') {
+                        defaultOption = options[2];
+                    } else {
+                        defaultOption = options[1];
+                    }
+                    if (defaultOption) {
+                        if (defaultOption.value) {
+                            this.actions.onChangeDefinitionTemporary(key, defaultOption.value);
+                        }
+                        if (defaultOption.deps) {
+                            for (const dep of defaultOption.deps) {
+                                this.actions.onChangeDefinitionTemporary(dep.key, dep.value);
+                            }
+                        }
+                    }
+                }
+            }
         }
     };
 
@@ -373,6 +426,9 @@ class Configurations extends PureComponent {
     }
 
     componentDidUpdate() {
+        const { qualityDefinitions } = this.props;
+        const { isOfficialTab, officialQualityDefinition } = this.state;
+
         // Switch to custom configuratino tab if change to non-official material.
         const materialType = this.props.defaultMaterialId.replace('material.', '');
         if (!isOfficialMaterial(materialType) && this.state.isOfficialTab) {
@@ -380,8 +436,6 @@ class Configurations extends PureComponent {
         }
 
         // Change official definition when material type is changed.
-        const { isOfficialTab, officialQualityDefinition } = this.state;
-        const { qualityDefinitions } = this.props;
         if (isOfficialMaterial(materialType) && isOfficialTab) {
             const regex = /quality\.[0-9a-zA-Z]+_[0-9a-zA-Z]+(_[0-9a-zA-Z]+)?/;
             const qualityDefinitionMaterialSuffix = officialQualityDefinition.definitionId.match(regex)[1] || '_pla';
@@ -390,7 +444,7 @@ class Configurations extends PureComponent {
             if (qualityDefinitionMaterialType !== materialType) {
                 const materialDefaultDefinitionId = MATERIAL_DEFAULT_DEFINITION_MAP[materialType];
                 const materialDefaultDefinition = qualityDefinitions.find(d => d.definitionId === materialDefaultDefinitionId);
-                this.actions.onSelectOfficialDefinition(materialDefaultDefinition);
+                materialDefaultDefinition && this.actions.onSelectOfficialDefinition(materialDefaultDefinition);
             }
         }
     }
@@ -452,7 +506,7 @@ class Configurations extends PureComponent {
                 }
             }
         } else if (nextProps.defaultQualityId !== this.props.defaultQualityId) {
-            const definition = this.props.qualityDefinitions.find(d => d.definitionId === nextProps.defaultQualityId);
+            const definition = nextProps.qualityDefinitions.find(d => d.definitionId === nextProps.defaultQualityId);
             if (nextProps.isAdvised) {
                 this.actions.onSelectOfficialDefinition(definition);
             } else {
@@ -475,7 +529,6 @@ class Configurations extends PureComponent {
         const qualityDefinitionType = qualityDefinition !== null
             ? qualityDefinition.definitionId.replace('quality.', '').replace(/_abs|_tpu|_petg/g, '')
             : '';
-        console.log('qualityDefinitionType', qualityDefinitionType);
         if (!qualityDefinition) {
             return null;
         }
@@ -527,6 +580,10 @@ class Configurations extends PureComponent {
 
         return (
             <div className={styles['configuration-options-container']}>
+                <PrintDefinitionWatcher
+                    qualityDefinition={qualityDefinition}
+                    onChange={this.actions.onQualityDefinitionChange}
+                />
                 {isOfficialTab && (
                     <div className={styles['configuration-options']} style={{ fontSize: '10px' }}>
                         <div className={styles['preset-options']}>

@@ -35,7 +35,7 @@ const INITIAL_STATE = {
     qualityDefinitions: [],
     isAdvised: true,
     defaultMaterialId: 'material.pla',
-    defaultQualityId: 'quality.fast_print',
+    defaultQualityId: 'quality.normal_quality',
     // Active definition
     // Hierarchy: FDM Printer -> Rose -> Active Definition (combination of machine, material, adhesion configurations)
     activeDefinition: ABSENT_OBJECT,
@@ -134,7 +134,9 @@ export const actions = {
         dispatch(actions.updateState({
             materialDefinitions: definitionManager.materialDefinitions,
             qualityDefinitions: definitionManager.qualityDefinitions,
-            activeDefinition: definitionManager.activeDefinition
+            activeDefinition: definitionManager.activeDefinition,
+            defaultMaterialId: 'material.pla',
+            defaultQualityId: 'quality.normal_quality'
         }));
 
         dispatch(actions.updateActiveDefinition(definitionManager.roseDefinition));
