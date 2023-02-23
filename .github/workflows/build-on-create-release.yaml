@@ -133,7 +133,7 @@ jobs:
                       ./output/*.tar.gz
 
     notice-in-feishu:
-        needs: [build-windows, build-linux]
+        needs: [build-windows, build-linux, build-macos]
         name: notice in feishu
         runs-on: ubuntu-latest
         steps:
