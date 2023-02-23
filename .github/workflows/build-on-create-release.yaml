@@ -158,9 +158,9 @@ jobs:
                   export LINUX_PACKAGE_NAME="Rose3D-${PACKAGE_VERSION}-linux-x64.tar.gz"
                   export LINUX_PACKAGE_URL="${RELEASE_URL}/${RELEASE_NAME}/${LINUX_PACKAGE_NAME}"
 
-                  export MAC_PACKAGE_NAME="Rose3D-${PACKAGE_VERSION}-mac-x64.dmg"
+                  export MAC_PACKAGE_NAME="Rose3D-${PACKAGE_VERSION}.dmg"
                   export MAC_PACKAGE_URL="${RELEASE_URL}/${RELEASE_NAME}/${MAC_PACKAGE_NAME}"
-                  export MAC_ARM_PACKAGE_NAME="Rose3D-${PACKAGE_VERSION}-mac-arm64.dmg"
+                  export MAC_ARM_PACKAGE_NAME="Rose3D-${PACKAGE_VERSION}-arm64.dmg"
                   export MAC_ARM_PACKAGE_URL="${RELEASE_URL}/${RELEASE_NAME}/${MAC_ARM_PACKAGE_NAME}"
 
                   export RELEASE_BODY_ESCAPE="${RELEASE_BODY//[$'\n\r']/ }"
