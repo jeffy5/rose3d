@@ -8,6 +8,7 @@ on:
 env:
     RELEASE_NAME: ${{ github.event.release.name }}
     RELEASE_BODY: ${{ github.event.release.body }}
+    RELEASE_URL: "https://github.com/jeffy5/rose3d/releases/download"
 
 jobs:
     build-windows:
@@ -25,8 +26,41 @@ jobs:
                   token: ${{ secrets.GITHUB_TOKEN }}
                   submodules: 'true'
 
-            # - name: Checkout submodules
-            #   run: git submodule update --init --recursive
+            - name: Use Node.js 16
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 16
+
+            - run: npm install -g npm@latest
+            - run: npm install
+
+            - run: npm run build
+
+            - name: Build Windows x64 Binaries
+              run: npm run build:win-x64
+            #   env:
+            #       CSC_LINK: ${{ secrets.CSC_LINK_WINDOWS }}
+            #       CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD_WINDOWS }}
+
+            - name: Release on Github
+              uses: softprops/action-gh-release@v1
+              with:
+                  files: |
+                      ./output/*.exe
+                      ./output/latest.yml
+
+    build-macos:
+        name: Build macOS Packages
+        runs-on: macos-11
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v3
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  submodules: 'true'
+
+            - name: Checkout submodules
+              run: git submodule update --init --recursive
 
             - name: Use Node.js 16
               uses: actions/setup-node@v3
@@ -38,226 +72,21 @@ jobs:
 
             - run: npm run build
 
-            # - name: Init OSS
-            #   if: github.repository == 'Snapmaker/Luban'
-            #   uses: yizhoumo/setup-ossutil@v1
-            #   with:
-            #       ossutil-version: '1.7.0'
-            #       endpoint: ${{ secrets.OSS_ENDPOINT }}
-            #       access-key-id: ${{ secrets.OSS_ACCESS_KEY_ID }}
-            #       access-key-secret: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
-
-            # ----------------------------------------------------------------
-            # Build Windows x64
-            # ----------------------------------------------------------------
-            - name: Build Windows x64 Binaries
-              run: npm run build:win-x64
-            #   env:
-            #       CSC_LINK: ${{ secrets.CSC_LINK_WINDOWS }}
-            #       CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD_WINDOWS }}
-
-            # https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable
-            - name: Setting Environment Variables
-              run: |
-                  $PRODUCT_NAME="Rose3D"
-                  $PACKAGE_NAME="Rose3D"
-                  $PACKAGE_VERSION=node -e "console.log(require('./src/package.json').version)"
-                  $RELEASE="${PACKAGE_NAME}-${PACKAGE_VERSION}"
-
-                  $INSTALLER_ASSET_PATH="./output/${PRODUCT_NAME} Setup ${PACKAGE_VERSION}.exe"
-                  $INSTALLER_ASSET_DEFAULT_NAME="${RELEASE}.exe"
-                  $INSTALLER_ASSET_NAME="${RELEASE}-win-x64.exe"
-
-                  $INSTALLER_AU_ASSET_NAME="${PACKAGE_NAME}-${PACKAGE_VERSION}.exe"
-
-                  echo "INSTALLER_ASSET_PATH=${INSTALLER_ASSET_PATH}" >> ${Env:GITHUB_ENV}
-                  echo "INSTALLER_ASSET_NAME=${INSTALLER_ASSET_NAME}" >> ${Env:GITHUB_ENV}
-                  echo "INSTALLER_AU_ASSET_NAME=${INSTALLER_AU_ASSET_NAME}" >> ${Env:GITHUB_ENV}
-                  echo "INSTALLER_ASSET_DEFAULT_NAME=${INSTALLER_ASSET_DEFAULT_NAME}" >> ${Env:GITHUB_ENV}
-
-            - name: Upload Release Asset - Windows x64 Installer
-              id: upload-release-asset-x64
-              uses: actions/upload-release-asset@v1
+            - name: Build macOS Binaries
+              run: npm run build:mac
               env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  # CSC_LINK: ${{ secrets.CSC_LINK_MACOS }}
+                  # CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD_MACOS }}
+                  APPLEID: ${{ secrets.APPLEID }}
+                  APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
+
+            - name: Release on Github
+              uses: softprops/action-gh-release@v1
               with:
-                  upload_url: ${{ github.event.release.upload_url }}
-                  asset_path: ${{ env.INSTALLER_ASSET_PATH }}
-                  asset_name: ${{ env.INSTALLER_ASSET_NAME }}
-                  asset_content_type: application/octet-stream
-
-            - name: Upload Release Asset - YAML (Auto Updates)
-              id: upload-release-asset-yaml
-              uses: actions/upload-release-asset@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{ github.event.release.upload_url }}
-                  asset_path: ./output/latest.yml
-                  asset_name: latest.yml
-                  asset_content_type: text/plain
-
-            # - name: Upload Release Asset - Windows x64 Installer (Auto Updates)
-            #   id: upload-release-asset-x64-au
-            #   uses: actions/upload-release-asset@v1
-            #   env:
-            #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            #   with:
-            #       upload_url: ${{ github.event.release.upload_url }}
-            #       asset_path: ${{ env.INSTALLER_ASSET_PATH }}
-            #       asset_name: ${{ env.INSTALLER_AU_ASSET_NAME }}
-            #       asset_content_type: application/octet-stream
-
-            # - name: Upload Release Windows x64 Installer To OSS
-            #   if: github.repository == 'Snapmaker/Luban'
-            #   run: |
-            #       ossutil cp -f "${{env.INSTALLER_ASSET_PATH}}" ${{secrets.OSS_UPDATE_PATH}}/${{env.INSTALLER_ASSET_NAME}}
-            #       ossutil cp -f ${{secrets.OSS_UPDATE_PATH}}/${{env.INSTALLER_ASSET_NAME}} ${{secrets.OSS_UPDATE_PATH}}/${{env.INSTALLER_ASSET_DEFAULT_NAME}}
-            #       ossutil cp -f ./output/latest.yml ${{secrets.OSS_UPDATE_PATH}}/latest.yml
-
-
-            # # ----------------------------------------------------------------
-            # # Build Windows x86
-            # # ----------------------------------------------------------------
-            # - name: Build Windows x86 Binaries
-            #   run: npm run build:win-ia32
-            # #   env:
-            # #       CSC_LINK: ${{ secrets.CSC_LINK_WINDOWS }}
-            # #       CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD_WINDOWS }}
-
-            # # https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable
-            # - name: Setting Environment Variables
-            #   run: |
-            #       $PRODUCT_NAME="Super3D"
-            #       $PACKAGE_NAME="super3d"
-            #       $PACKAGE_VERSION=node -e "console.log(require('./src/package.json').version)"
-            #       $RELEASE="${PACKAGE_NAME}-${PACKAGE_VERSION}"
-
-            #       $INSTALLER_ASSET_PATH="./output/${PRODUCT_NAME} ${PACKAGE_VERSION}.exe"
-            #       $INSTALLER_ASSET_NAME="${RELEASE}-win-ia32.exe"
-
-            #       echo "INSTALLER_ASSET_PATH=${INSTALLER_ASSET_PATH}" >> ${Env:GITHUB_ENV}
-            #       echo "INSTALLER_ASSET_NAME=${INSTALLER_ASSET_NAME}" >> ${Env:GITHUB_ENV}
-
-            # - name: Upload Release Asset - Windows x86 Installer
-            #   id: upload-release-asset-x86
-            #   uses: actions/upload-release-asset@v1
-            #   env:
-            #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            #   with:
-            #       upload_url: ${{ github.event.release.upload_url }}
-            #       asset_path: ${{ env.INSTALLER_ASSET_PATH }}
-            #       asset_name: ${{ env.INSTALLER_ASSET_NAME }}
-            #       asset_content_type: application/octet-stream
-
-            # - name: Upload Release Windows x86 Installer To OSS
-            #   if: github.repository == 'Snapmaker/Luban'
-            #   run: ossutil cp -f "${{env.INSTALLER_ASSET_PATH}}" ${{secrets.OSS_UPDATE_PATH}}/${{env.INSTALLER_ASSET_NAME}}
-
-    # build-macos:
-    #     name: Build macOS Packages
-
-    #     # macos-11.7
-    #     runs-on: macos-11
-
-    #     steps:
-    #         - name: Checkout Code
-    #           uses: actions/checkout@v3
-    #           with:
-    #               token: ${{ secrets.GITHUB_TOKEN }}
-    #               submodules: 'true'
-
-    #         - name: Checkout submodules
-    #           run: git submodule update --init --recursive
-
-    #         - name: Use Node.js 16
-    #           uses: actions/setup-node@v3
-    #           with:
-    #               node-version: 16
-
-    #         - run: npm install -g npm@latest
-    #         - run: npm install
-
-    #         - run: npm run build
-
-    #         # - name: Init OSS
-    #         #   if: github.repository == 'Snapmaker/Luban'
-    #         #   uses: yizhoumo/setup-ossutil@v1
-    #         #   with:
-    #         #       ossutil-version: '1.7.0'
-    #         #       endpoint: ${{ secrets.OSS_ENDPOINT }}
-    #         #       access-key-id: ${{ secrets.OSS_ACCESS_KEY_ID }}
-    #         #       access-key-secret: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
-
-    #         # ----------------------------------------------------------------
-    #         # Build macOS x64
-    #         # ----------------------------------------------------------------
-    #         - name: Build macOS Binaries
-    #           run: npm run build:mac-x64
-    #         #   env:
-    #         #       CSC_LINK: ${{ secrets.CSC_LINK_MACOS }}
-    #         #       CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD_MACOS }}
-    #         #       APPLEID: ${{ secrets.APPLEID }}
-    #         #       APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
-
-    #         # https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable
-    #         - name: Setting Environment Variables
-    #           run: |
-    #               PRODUCT_NAME="Snapmaker Luban"
-    #               PACKAGE_NAME="Snapmaker-Luban"
-    #               PACKAGE_VERSION=`node -e "console.log(require('./src/package.json').version)"`
-    #               RELEASE=${PACKAGE_NAME}-${PACKAGE_VERSION}
-
-    #               INSTALLER_ASSET_PATH="./output/${PRODUCT_NAME}-${PACKAGE_VERSION}.dmg"
-    #               INSTALLER_ASSET_NAME="${RELEASE}-mac-x64.dmg"
-
-    #               ZIP_ASSET_PATH="./output/${PRODUCT_NAME}-${PACKAGE_VERSION}-mac.zip"
-    #               ZIP_ASSET_NAME="${RELEASE}-mac.zip"
-
-    #               echo "INSTALLER_ASSET_PATH=$INSTALLER_ASSET_PATH" >> $GITHUB_ENV
-    #               echo "INSTALLER_ASSET_NAME=$INSTALLER_ASSET_NAME" >> $GITHUB_ENV
-    #               echo "ZIP_ASSET_PATH=$ZIP_ASSET_PATH" >> $GITHUB_ENV
-    #               echo "ZIP_ASSET_NAME=$ZIP_ASSET_NAME" >> $GITHUB_ENV
-
-    #         - name: Upload Release Asset - macOS DMG Installer
-    #           id: upload-release-asset-dmg
-    #           uses: actions/upload-release-asset@v1
-    #           env:
-    #               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #           with:
-    #               upload_url: ${{ github.event.release.upload_url }}
-    #               asset_path: ${{ env.INSTALLER_ASSET_PATH }}
-    #               asset_name: ${{ env.INSTALLER_ASSET_NAME }}
-    #               asset_content_type: application/octet-stream
-
-    #         - name: Upload Release Asset - YAML (Auto Updates)
-    #           id: upload-release-asset-yaml
-    #           uses: actions/upload-release-asset@v1
-    #           env:
-    #               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #           with:
-    #               upload_url: ${{ github.event.release.upload_url }}
-    #               asset_path: ./output/latest-mac.yml
-    #               asset_name: latest-mac.yml
-    #               asset_content_type: text/plain
-
-    #         - name: Upload Release Asset - macOS ZIP (Auto Updates)
-    #           id: upload-release-asset-zip
-    #           uses: actions/upload-release-asset@v1
-    #           env:
-    #               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #           with:
-    #               upload_url: ${{ github.event.release.upload_url }}
-    #               asset_path: ${{ env.ZIP_ASSET_PATH }}
-    #               asset_name: ${{ env.ZIP_ASSET_NAME }}
-    #               asset_content_type: application/octet-stream
-
-    #         # - name: Upload Release macOS Installer OSS
-    #         #   if: github.repository == 'Snapmaker/Luban'
-    #         #   run: |
-    #         #       ossutil cp -f ./output/*.zip ${{secrets.OSS_UPDATE_PATH}}/${{env.INSTALLER_ASSET_NAME}}
-    #         #       ossutil cp -f ./output/*.dmg ${{secrets.OSS_UPDATE_PATH}}/${{env.ZIP_ASSET_NAME}}
-    #         #       ossutil cp -f ./output/latest-mac.yml ${{secrets.OSS_UPDATE_PATH}}/latest-mac.yml
+                  files: |
+                      ./output/*.zip
+                      ./output/*.dmg
+                      ./output/latest-mac.yml
 
     build-linux:
         name: Build Linux Packages
@@ -272,9 +101,6 @@ jobs:
                   token: ${{ secrets.GITHUB_TOKEN }}
                   submodules: 'true'
 
-            # - name: Checkout submodules
-            #   run: git submodule update --init --recursive
-
             - name: Use Node.js 16
               uses: actions/setup-node@v3
               with:
@@ -285,18 +111,6 @@ jobs:
 
             - run: npm run build
 
-            # - name: Init OSS
-            #   if: github.repository == 'Snapmaker/Luban'
-            #   uses: yizhoumo/setup-ossutil@v1
-            #   with:
-            #       ossutil-version: '1.7.0'
-            #       endpoint: ${{ secrets.OSS_ENDPOINT }}
-            #       access-key-id: ${{ secrets.OSS_ACCESS_KEY_ID }}
-            #       access-key-secret: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
-
-            # ----------------------------------------------------------------
-            # Build Linux x64
-            # ----------------------------------------------------------------
             - name: Build Linux x64 Binaries
               run: npm run build:linux-x64
 
@@ -310,68 +124,13 @@ jobs:
                   tar zcfh "./output/${RELEASE}-linux-x64.tar.gz" "${RELEASE}-linux-x64"
                   rm -f "${RELEASE}-linux-x64"
 
-            - name: Setting Environment Variables
-              run: |
-                  PRODUCT_NAME="Rose3D"
-                  PACKAGE_NAME="Rose3D"
-                  PACKAGE_VERSION=`node -e "console.log(require('./src/package.json').version)"`
-                  RELEASE=${PACKAGE_NAME}-${PACKAGE_VERSION}
-
-                  DEB_ASSET_PATH="./output/${PACKAGE_NAME}_${PACKAGE_VERSION}_amd64.deb"
-                  DEB_ASSET_NAME="${RELEASE}-linux-amd64.deb"
-
-                  RPM_ASSET_PATH="./output/${PACKAGE_NAME}-${PACKAGE_VERSION}.x86_64.rpm"
-                  RPM_ASSET_NAME="${RELEASE}-linux.x86_64.rpm"
-
-                  TAR_ASSET_PATH="./output/${RELEASE}-linux-x64.tar.gz"
-                  TAR_ASSET_NAME="${RELEASE}-linux-x64.tar.gz"
-
-                  echo "DEB_ASSET_PATH=$DEB_ASSET_PATH" >> $GITHUB_ENV
-                  echo "DEB_ASSET_NAME=$DEB_ASSET_NAME" >> $GITHUB_ENV
-
-                  echo "RPM_ASSET_PATH=$RPM_ASSET_PATH" >> $GITHUB_ENV
-                  echo "RPM_ASSET_NAME=$RPM_ASSET_NAME" >> $GITHUB_ENV
-
-                  echo "TAR_ASSET_PATH=$TAR_ASSET_PATH" >> $GITHUB_ENV
-                  echo "TAR_ASSET_NAME=$TAR_ASSET_NAME" >> $GITHUB_ENV
-
-            - name: Upload Release Asset - Debian
-              uses: actions/upload-release-asset@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - name: Release on Github
+              uses: softprops/action-gh-release@v1
               with:
-                  upload_url: ${{ github.event.release.upload_url }}
-                  asset_path: ${{ env.DEB_ASSET_PATH }}
-                  asset_name: ${{ env.DEB_ASSET_NAME }}
-                  asset_content_type: application/octet-stream
-
-            # - name: Upload Release Asset - RPM
-            #   uses: actions/upload-release-asset@v1
-            #   env:
-            #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            #   with:
-            #       upload_url: ${{ github.event.release.upload_url }}
-            #       asset_path: ${{ env.RPM_ASSET_PATH }}
-            #       asset_name: ${{ env.RPM_ASSET_NAME }}
-            #       asset_content_type: application/octet-stream
-
-            - name: Upload Release Asset - TAR
-              uses: actions/upload-release-asset@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{ github.event.release.upload_url }}
-                  asset_path: ${{ env.TAR_ASSET_PATH }}
-                  asset_name: ${{ env.TAR_ASSET_NAME }}
-                  asset_content_type: application/octet-stream
-
-            # - name: Upload Release linux Installer To OSS
-            #   if: github.repository == 'Snapmaker/Luban'
-            #   run: |
-            #       ossutil cp -f ./output/*.deb* ${{secrets.OSS_UPDATE_PATH}}/${{ env.DEB_ASSET_NAME }}
-            #       ossutil cp -f ./output/*.rpm* ${{secrets.OSS_UPDATE_PATH}}/${{ env.RPM_ASSET_NAME }}
-            #       ossutil cp -f ./output/*.tar* ${{secrets.OSS_UPDATE_PATH}}/${{ env.TAR_ASSET_NAME }}
-            #
+                  files: |
+                      ./output/*.deb
+                      ./output/*.rpm
+                      ./output/*.tar.gz
 
     notice-in-feishu:
         needs: [build-windows, build-linux]
@@ -395,9 +154,15 @@ jobs:
                   export PACKAGE_VERSION=`node -e "console.log(require('./src/package.json').version)"`
 
                   export WINDOW_PACKAGE_NAME="Rose3D-${PACKAGE_VERSION}-win-x64.exe"
-                  export WINDOW_PACKAGE_URL="https://github.com/jeffy5/rose3d/releases/download/${RELEASE_NAME}/${WINDOW_PACKAGE_NAME}"
+                  export WINDOW_PACKAGE_URL="${RELEASE_URL}/${RELEASE_NAME}/${WINDOW_PACKAGE_NAME}"
                   export LINUX_PACKAGE_NAME="Rose3D-${PACKAGE_VERSION}-linux-x64.tar.gz"
-                  export LINUX_PACKAGE_URL="https://github.com/jeffy5/rose3d/releases/download/${RELEASE_NAME}/${LINUX_PACKAGE_NAME}"
+                  export LINUX_PACKAGE_URL="${RELEASE_URL}/${RELEASE_NAME}/${LINUX_PACKAGE_NAME}"
+
+                  export MAC_PACKAGE_NAME="Rose3D-${PACKAGE_VERSION}-mac-x64.dmg"
+                  export MAC_PACKAGE_URL="${RELEASE_URL}/${RELEASE_NAME}/${MAC_PACKAGE_NAME}"
+                  export MAC_ARM_PACKAGE_NAME="Rose3D-${PACKAGE_VERSION}-mac-arm64.dmg"
+                  export MAC_ARM_PACKAGE_URL="${RELEASE_URL}/${RELEASE_NAME}/${MAC_ARM_PACKAGE_NAME}"
+
                   export RELEASE_BODY_ESCAPE="${RELEASE_BODY//[$'\n\r']/ }"
                   export MESSAGE_BODY='{
                       "msg_type":"post",
@@ -424,6 +189,20 @@ jobs:
                                               "tag":"a",
                                               "text":"${LINUX_PACKAGE_NAME}",
                                               "href":"${LINUX_PACKAGE_URL}"
+                                          }
+                                      ],
+                                      [
+                                          {
+                                              "tag":"a",
+                                              "text":"${MAC_PACKAGE_NAME}",
+                                              "href":"${MAC_PACKAGE_URL}"
+                                          }
+                                      ],
+                                      [
+                                          {
+                                              "tag":"a",
+                                              "text":"${MAC_ARM_PACKAGE_NAME}",
+                                              "href":"${MAC_ARM_PACKAGE_URL}"
                                           }
                                       ]
                                   ]
