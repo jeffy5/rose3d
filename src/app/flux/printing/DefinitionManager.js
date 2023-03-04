@@ -241,7 +241,7 @@ class DefinitionManager {
         const gcode = [
             ';Start GCode begin',
             'G90 ; use absolute coordinates',
-            'M83 ; extruder relative mode',
+            // 'M83 ; extruder relative mode',
             `M140 S${bedTempLayer0} ; set final bed temp`,
             'M104 S150 ; set temporary nozzle temp to prevent oozing during homing',
             'G4 S10 ; allow partial nozzle warmup',
