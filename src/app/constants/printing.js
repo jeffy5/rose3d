@@ -70,24 +70,24 @@ export const OFFICIAL_CONFIG_MAP = {
         options: {
             pla: {
                 normal_quality: [
-                    { label: 'Slow', value: 70 },
-                    { label: 'Normal', value: 80 },
-                    { label: 'Fast', value: 90 }
+                    { label: 'Slow', value: 40 },
+                    { label: 'Normal', value: 50 },
+                    { label: 'Fast', value: 60 }
                 ],
                 fast_print: [
-                    { label: 'Slow', value: 75 },
-                    { label: 'Normal', value: 85 },
-                    { label: 'Fast', value: 100 }
+                    { label: 'Slow', value: 50 },
+                    { label: 'Normal', value: 60 },
+                    { label: 'Fast', value: 80 }
                 ],
                 high_quality: [
                     { label: 'Slow', value: 40 },
-                    { label: 'Normal', value: 60 },
-                    { label: 'Fast', value: 70 }
+                    { label: 'Normal', value: 50 },
+                    { label: 'Fast', value: 60 }
                 ],
                 race_quality: [
-                    { label: 'Slow', value: 70 },
-                    { label: 'Normal', value: 80 },
-                    { label: 'Fast', value: 90 }
+                    { label: 'Slow', value: 45 },
+                    { label: 'Normal', value: 55 },
+                    { label: 'Fast', value: 70 }
                 ]
             },
             tpu: {
