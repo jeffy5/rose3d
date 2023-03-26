@@ -26,9 +26,11 @@ class Printing extends PureComponent {
     };
 
     actions = {
-        onDropAccepted: async (file) => {
+        onDropAccepted: async (files) => {
             try {
-                await this.props.uploadModel(file);
+                for (const file of files) {
+                    await this.props.uploadModel(file);
+                }
             } catch (e) {
                 modal({
                     title: i18n._('Failed to open model.'),
@@ -76,6 +78,7 @@ class Printing extends PureComponent {
         return (
             <div style={{ display: hidden ? 'none' : 'block' }}>
                 <Dropzone
+                    multiple
                     disabled={state.isDraggingWidget}
                     accept=".stl, .obj"
                     dragEnterMsg={i18n._('Drop an STL/OBJ file here.')}

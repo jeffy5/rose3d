@@ -16,7 +16,8 @@ class Dropzone extends PureComponent {
         accept: PropTypes.string.isRequired,
         onDropAccepted: PropTypes.func.isRequired,
         onDropRejected: PropTypes.func.isRequired,
-        dragEnterMsg: PropTypes.string.isRequired
+        dragEnterMsg: PropTypes.string.isRequired,
+        multiple: PropTypes.bool
     };
 
     state = {
@@ -32,18 +33,18 @@ class Dropzone extends PureComponent {
             return;
         }
 
-        const file = acceptedFiles[0];
-        if (acceptExtNames.includes(path.extname(file.name).toLowerCase())) {
-            onDropAccepted(file);
-        } else {
-            onDropRejected(file);
+        const files = acceptedFiles.filter(f => acceptExtNames.includes(path.extname(f.name).toLowerCase()));
+        if (files.length === 0) {
+            onDropRejected(files);
+            return;
         }
+
+        onDropAccepted(files.splice(0, this.props.multiple ? files.length : 1));
     }
 
     render() {
-        const { disabled = false, dragEnterMsg = '', children = null } = this.props;
+        const { disabled = false, dragEnterMsg = '', children = null, multiple } = this.props;
         const isDragging = this.state.isDragging;
-
 
         return (
             <div>
@@ -62,7 +63,7 @@ class Dropzone extends PureComponent {
                     disableClick
                     disablePreview
                     disabled={disabled}
-                    multiple={false}
+                    multiple={multiple}
                     onDragEnter={() => {
                         if (!isDragging) {
                             this.setState({ isDragging: true });

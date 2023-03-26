@@ -57,9 +57,10 @@ class VisualizerModelTransformation extends PureComponent {
             this.fileInput.current.click();
         },
         onChangeFile: async (event) => {
-            const file = event.target.files[0];
             try {
-                await this.props.uploadModel(file);
+                for (const file of event.target.files) {
+                    await this.props.uploadModel(file);
+                }
             } catch (e) {
                 modal({
                     title: i18n._('Failed to upload model'),
@@ -188,11 +189,11 @@ class VisualizerModelTransformation extends PureComponent {
                         }}
                     />
                     <input
+                        multiple
                         ref={this.fileInput}
                         type="file"
                         accept=".stl, .obj"
                         style={{ display: 'none' }}
-                        multiple={false}
                         onChange={actions.onChangeFile}
                     />
                     <div
