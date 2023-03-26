@@ -4,7 +4,7 @@
     "inherits": "rose",
     "overrides": {
         "material_flow": {
-            "default_value": 110
+            "default_value": 100
         },
         "machine_heated_bed": {
             "default_value": true

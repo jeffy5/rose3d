@@ -743,5 +743,6 @@
     "Regular Fan Speed": "Regular Fan Speed",
     "Maximum Fan Speed": "Maximum Fan Speed",
     "Regular Fan Speed at Height": "Regular Fan Speed at Height",
-    "Regular Fan Speed at Layer": "Regular Fan Speed at Layer"
+    "Regular Fan Speed at Layer": "Regular Fan Speed at Layer",
+    "Support Line Width": "Support Line Width"
 }

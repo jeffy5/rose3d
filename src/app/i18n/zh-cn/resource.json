@@ -745,5 +745,6 @@
     "Regular Fan Speed": "正常风扇速度",
     "Maximum Fan Speed": "最大风扇速度",
     "Regular Fan Speed at Height": "正常风扇速度（高度）",
-    "Regular Fan Speed at Layer": "正常风扇速度（层）"
+    "Regular Fan Speed at Layer": "正常风扇速度（层）",
+    "Support Line Width": "走线宽度（支撑结构）"
 }

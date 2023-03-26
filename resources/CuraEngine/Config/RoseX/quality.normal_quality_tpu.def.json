@@ -10,34 +10,38 @@
                     "default_value": 0.16
                 },
                 "layer_height_0": {
-                    "default_value": 0.3
+                    "default_value": 0.16
                 },
                 "initial_layer_line_width_factor": {
-                    "default_value": 93
+                    "default_value": 100
                 },
                 "wall_line_width":{
                     "label": "Wall Line Width",
-                    "default_value": 0.45
+                    "default_value": 0.4
                 },
                  "wall_line_width_0":{
                     "label": "Outer Wall Line Width",
-                     "default_value": 0.42
+                     "default_value": 0.4
                 },
                 "wall_line_width_x":{
                     "label": "Inner Wall(s) Line Width",
-                    "default_value": 0.45
+                    "default_value": 0.4
                 },
                 "infill_line_width":{
                     "label": "Infill Line Width",
-                    "default_value": 0.45
+                    "default_value": 0.4
                 },
                 "support_line_width":{
                     "label": "Support Line Width",
-                    "default_value": 0.4
+                    "default_value": 0.35
                 },
                 "skin_line_width":{
                     "label": "Top/Bottom Line Width",
                     "default_value": 0.42
+                },
+                "skirt_brim_line_width": {
+                    "label": "Skirt/Brim Line Width",
+                    "default_value": 0.45
                 }
             }
         },
@@ -88,7 +92,7 @@
                     "default_value": 3
                 },
                 "retract_at_layer_change": {
-                    "default_value": false
+                    "default_value": true
                 }
             }
         },
@@ -96,7 +100,7 @@
             "type": "category",
             "children": {
                 "speed_travel": {
-                    "default_value": 150
+                    "default_value": 90
                 },
                 "speed_topbottom": {
                     "default_value": 35
@@ -120,10 +124,10 @@
                     "default_value": 60
                 },
                 "speed_print_layer_0": {
-                    "default_value": 25
+                    "default_value": 15
                 },
                 "speed_travel_layer_0": {
-                    "default_value": 100
+                    "default_value": 70
                 },
                 "skirt_brim_speed": {
                     "default_value": 25
@@ -143,10 +147,10 @@
                     "default_value": 100
                 },
                 "cool_fan_full_at_height": {
-                    "default_value": 0.5
+                    "default_value": 2
                 },
                 "cool_fan_full_layer": {
-                    "default_value": 2
+                    "default_value": 6
                 }
             }
         },
@@ -185,7 +189,7 @@
                     "default_value": 8.0,
                     "children": {
                         "brim_line_count": {
-                            "default_value": 3
+                            "default_value": 10
                         }
                     }
                 },

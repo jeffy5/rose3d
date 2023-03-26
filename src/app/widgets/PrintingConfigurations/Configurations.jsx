@@ -210,7 +210,8 @@ class Configurations extends PureComponent {
                     'support_type',
                     'support_pattern',
                     'support_infill_rate',
-                    'support_angle'
+                    'support_angle',
+                    'support_line_width'
                 ]
             },
             {
