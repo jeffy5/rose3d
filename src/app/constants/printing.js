@@ -13,7 +13,7 @@ export const OFFICIAL_CONFIG_MAP = {
             pla: {
                 normal_quality: [
                     {
-                        label: 'Rough',
+                        label: 'Fine',
                         value: 0.12,
                         deps: [
                             { key: 'support_enable', value: true },
@@ -26,56 +26,56 @@ export const OFFICIAL_CONFIG_MAP = {
                         deps: [{ key: 'layer_height_0', value: 0.16 }]
                     },
                     {
-                        label: 'Fine',
+                        label: 'Rough',
                         value: 0.2,
                         deps: [{ key: 'layer_height_0', value: 0.2 }]
                     }
                 ],
                 fast_print: [
-                    { label: 'Rough', value: 0.16, deps: [{ key: 'layer_height_0', value: 0.16 }] },
+                    { label: 'Fine', value: 0.16, deps: [{ key: 'layer_height_0', value: 0.16 }] },
                     { label: 'Normal', value: 0.2, deps: [{ key: 'layer_height_0', value: 0.2 }] },
-                    { label: 'Fine', value: 0.25, deps: [{ key: 'layer_height_0', value: 0.25 }] }
+                    { label: 'Rough', value: 0.25, deps: [{ key: 'layer_height_0', value: 0.25 }] }
                 ],
                 high_quality: [
-                    { label: 'Rough', value: 0.06, deps: [{ key: 'layer_height_0', value: 0.06 }] },
+                    { label: 'Fine', value: 0.06, deps: [{ key: 'layer_height_0', value: 0.06 }] },
                     { label: 'Normal', value: 0.08, deps: [{ key: 'layer_height_0', value: 0.08 }] },
-                    { label: 'Fine', value: 0.12, deps: [{ key: 'layer_height_0', value: 0.12 }] }
+                    { label: 'Rough', value: 0.12, deps: [{ key: 'layer_height_0', value: 0.12 }] }
                 ],
                 race_quality: [
-                    { label: 'Rough', value: 0.16, deps: [{ key: 'layer_height_0', value: 0.16 }] },
+                    { label: 'Fine', value: 0.16, deps: [{ key: 'layer_height_0', value: 0.16 }] },
                     { label: 'Normal', value: 0.2, deps: [{ key: 'layer_height_0', value: 0.2 }] },
-                    { label: 'Fine', value: 0.25, deps: [{ key: 'layer_height_0', value: 0.25 }] }
+                    { label: 'Rough', value: 0.25, deps: [{ key: 'layer_height_0', value: 0.25 }] }
                 ]
             },
             tpu: {
                 normal_quality: [
-                    { label: 'Rough', value: 0.12, deps: [{ key: 'layer_height_0', value: 0.12 }] },
+                    { label: 'Fine', value: 0.12, deps: [{ key: 'layer_height_0', value: 0.12 }] },
                     { label: 'Normal', value: 0.16, deps: [{ key: 'layer_height_0', value: 0.16 }] },
-                    { label: 'Fine', value: 0.2, deps: [{ key: 'layer_height_0', value: 0.2 }] }
+                    { label: 'Rough', value: 0.2, deps: [{ key: 'layer_height_0', value: 0.2 }] }
                 ],
                 fast_print: [
-                    { label: 'Rough', value: 0.16, deps: [{ key: 'layer_height_0', value: 0.16 }] },
+                    { label: 'Fine', value: 0.16, deps: [{ key: 'layer_height_0', value: 0.16 }] },
                     { label: 'Normal', value: 0.2, deps: [{ key: 'layer_height_0', value: 0.2 }] },
-                    { label: 'Fine', value: 0.25, deps: [{ key: 'layer_height_0', value: 0.25 }] }
+                    { label: 'Rough', value: 0.25, deps: [{ key: 'layer_height_0', value: 0.25 }] }
                 ]
             },
             petg: {
                 normal_quality: [
-                    { label: 'Rough', value: 0.12, deps: [{ key: 'layer_height_0', value: 0.12 }] },
+                    { label: 'Fine', value: 0.12, deps: [{ key: 'layer_height_0', value: 0.12 }] },
                     { label: 'Normal', value: 0.16, deps: [{ key: 'layer_height_0', value: 0.16 }] },
-                    { label: 'Fine', value: 0.2, deps: [{ key: 'layer_height_0', value: 0.2 }] }
+                    { label: 'Rough', value: 0.2, deps: [{ key: 'layer_height_0', value: 0.2 }] }
                 ],
                 fast_print: [
-                    { label: 'Rough', value: 0.18, deps: [{ key: 'layer_height_0', value: 0.18 }] },
+                    { label: 'Fine', value: 0.18, deps: [{ key: 'layer_height_0', value: 0.18 }] },
                     { label: 'Normal', value: 0.2, deps: [{ key: 'layer_height_0', value: 0.2 }] },
-                    { label: 'Fine', value: 0.25, deps: [{ key: 'layer_height_0', value: 0.25 }] }
+                    { label: 'Rough', value: 0.25, deps: [{ key: 'layer_height_0', value: 0.25 }] }
                 ]
             },
             abs: {
                 normal_quality: [
-                    { label: 'Rough', value: 0.16, deps: [{ key: 'layer_height_0', value: 0.12 }] },
+                    { label: 'Fine', value: 0.16, deps: [{ key: 'layer_height_0', value: 0.12 }] },
                     { label: 'Normal', value: 0.18, deps: [{ key: 'layer_height_0', value: 0.12 }] },
-                    { label: 'Fine', value: 0.2, deps: [{ key: 'layer_height_0', value: 0.12 }] }
+                    { label: 'Rough', value: 0.2, deps: [{ key: 'layer_height_0', value: 0.12 }] }
                 ]
             }
         }
