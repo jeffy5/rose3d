@@ -672,9 +672,7 @@ class Configurations extends PureComponent {
                                                                     ? officialConfig.checkSelected(option.value, defaultValue, settings)
                                                                     : defaultValue === option.value })}
                                                             onClick={() => {
-                                                                if (option.value) {
-                                                                    this.actions.onChangeDefinitionTemporary(key, option.value);
-                                                                }
+                                                                this.actions.onChangeDefinitionTemporary(key, option.value);
                                                                 if (option.deps) {
                                                                     for (const dep of option.deps) {
                                                                         this.actions.onChangeDefinitionTemporary(dep.key, dep.value);

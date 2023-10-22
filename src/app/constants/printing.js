@@ -37,9 +37,9 @@ export const OFFICIAL_CONFIG_MAP = {
                     { label: 'Rough', value: 0.25, deps: [{ key: 'layer_height_0', value: 0.25 }] }
                 ],
                 high_quality: [
-                    { label: 'Fine', value: 0.06, deps: [{ key: 'layer_height_0', value: 0.06 }] },
-                    { label: 'Normal', value: 0.08, deps: [{ key: 'layer_height_0', value: 0.08 }] },
-                    { label: 'Rough', value: 0.12, deps: [{ key: 'layer_height_0', value: 0.12 }] }
+                    { label: 'Fine', value: 0.02, deps: [{ key: 'layer_height_0', value: 0.02 }] },
+                    { label: 'Normal', value: 0.06, deps: [{ key: 'layer_height_0', value: 0.06 }] },
+                    { label: 'Rough', value: 0.08, deps: [{ key: 'layer_height_0', value: 0.08 }] }
                 ],
                 race_quality: [
                     { label: 'Fine', value: 0.16, deps: [{ key: 'layer_height_0', value: 0.16 }] },
@@ -95,9 +95,9 @@ export const OFFICIAL_CONFIG_MAP = {
                     { label: 'Fast', value: 80 }
                 ],
                 high_quality: [
-                    { label: 'Slow', value: 40 },
-                    { label: 'Normal', value: 50 },
-                    { label: 'Fast', value: 60 }
+                    { label: 'Slow', value: 25 },
+                    { label: 'Normal', value: 35 },
+                    { label: 'Fast', value: 45 }
                 ],
                 race_quality: [
                     { label: 'Slow', value: 45 },
@@ -153,7 +153,7 @@ export const OFFICIAL_CONFIG_MAP = {
                     { label: 'Strong', value: 10 }
                 ],
                 high_quality: [
-                    { label: 'Thin', value: 2 },
+                    { label: 'Thin', value: 0 },
                     { label: 'Normal', value: 5 },
                     { label: 'Strong', value: 10 }
                 ],

@@ -13,7 +13,7 @@
                     "default_value": 0.2
                 },
                 "initial_layer_line_width_factor": {
-                    "default_value": 100
+                    "default_value": 120
                 },
                 "wall_line_width":{
                     "label": "Wall Line Width",
@@ -89,10 +89,10 @@
                     "default_value": 50
                 },
                 "retraction_amount": {
-                    "default_value": 3
+                    "default_value": 6
                 },
                 "retract_at_layer_change": {
-                    "default_value": true
+                    "default_value": false
                 }
             }
         },
